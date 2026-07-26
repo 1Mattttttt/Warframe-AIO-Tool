@@ -1,39 +1,43 @@
 # Warframe AIO Tool
 
-Warframe AIO Tool é um projeto feito para juntar várias ferramentas do Warframe em um único lugar.
+Warframe AIO Tool is a personal project made to bring multiple Warframe-related tools into one place.
 
-A ideia começou como um launcher personalizado, mas acabou virando uma ferramenta completa com sistema de monitoramento, gerenciamento de processos, configurações, logs em tempo real e uma interface totalmente customizada.
+It started as a custom launcher, but slowly evolved into a complete utility with monitoring systems, real-time logs, custom settings, and a fully personalized interface.
 
-## O que ele tem?
+## What it includes
 
-- Launcher próprio para iniciar o Warframe
-- Sistema de monitoramento em tempo real
-- Dashboard com status dos serviços
-- Sistema de temas dinâmicos
-- Logs detalhados
-- Configurações salvas automaticamente
-- Interface com animações e efeitos visuais
-- Background cinematográfico com partículas e efeitos em GPU
-- Suporte para recursos personalizados
+- Custom Warframe launcher
+- Real-time monitoring system
+- Dashboard with live statuses
+- Dynamic theme system
+- Detailed logging console
+- Automatic settings saving
+- Custom animations and transitions
+- GPU-powered cinematic background effects
+- Custom resources and integrations
 
-## Sobre a interface
+## About the UI
 
-Eu quis fugir daquele estilo de programa genérico com botão cinza e tela parada.
+The main idea was to avoid making another boring utility with a basic layout.
 
-O objetivo foi fazer algo com mais cara de aplicativo de jogo mesmo, com transições suaves, efeitos de iluminação, partículas, sons e uma experiência mais "premium".
+I wanted it to feel more like an actual game launcher, with smooth animations, lighting effects, particles, transitions, and a more premium experience.
 
-## Tecnologias usadas
+A lot of time went into making the interface feel alive instead of just being a collection of buttons.
+
+## Technologies
+
+Built with:
 
 - C#
 - .NET 8
 - WPF / XAML
 - Windows APIs
-- Sistemas próprios de animação e renderização
+- Custom rendering and animation systems
 
-## Status
+## Current Status
 
-Projeto em desenvolvimento.
+The project is still in development.
 
-Ainda tem muita coisa que pode ser melhorada, mas a base já está pronta e a ideia é continuar adicionando novas funções e deixando a experiência cada vez melhor.
+The main systems are already working, but there is always room for improvements, new features, and more polish.
 
-Feito por alguém que gosta de Warframe e gosta de criar coisas.
+Made by someone who enjoys Warframe, coding, and building random ideas into actual projects.
