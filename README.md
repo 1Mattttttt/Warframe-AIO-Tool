@@ -1,157 +1,39 @@
-# Warframe-AIO-Tool
-
-# ⚡ Warframe AIO Tool
-
-<div align="center">
-
-<img src="Assets/logo.png" width="120">
-
 # Warframe AIO Tool
 
-**A complete companion utility for Warframe players.**
+Warframe AIO Tool é um projeto feito para juntar várias ferramentas do Warframe em um único lugar.
 
-Launcher • Tools • Automation • Monitoring • Custom Experience
+A ideia começou como um launcher personalizado, mas acabou virando uma ferramenta completa com sistema de monitoramento, gerenciamento de processos, configurações, logs em tempo real e uma interface totalmente customizada.
 
-</div>
+## O que ele tem?
 
----
+- Launcher próprio para iniciar o Warframe
+- Sistema de monitoramento em tempo real
+- Dashboard com status dos serviços
+- Sistema de temas dinâmicos
+- Logs detalhados
+- Configurações salvas automaticamente
+- Interface com animações e efeitos visuais
+- Background cinematográfico com partículas e efeitos em GPU
+- Suporte para recursos personalizados
 
-## 🚀 About
+## Sobre a interface
 
-**Warframe AIO Tool** is an all-in-one utility designed to enhance the Warframe experience by combining multiple tools, quality-of-life features, and system integrations into a single modern application.
+Eu quis fugir daquele estilo de programa genérico com botão cinza e tela parada.
 
-Built with performance, customization, and user experience in mind, the project provides a centralized hub for managing Warframe-related actions with a cinematic and highly customizable interface.
+O objetivo foi fazer algo com mais cara de aplicativo de jogo mesmo, com transições suaves, efeitos de iluminação, partículas, sons e uma experiência mais "premium".
 
----
-
-## ✨ Features
-
-### 🎮 Custom Warframe Launcher
-
-- Launch Warframe directly from the application
-- Support for multiple launch methods
-- Custom launch parameters
-- Standalone launcher support
-- Integrated launcher management
-
----
-
-### 🛡️ SDK Killer System
-
-A smart monitoring system designed to manage Discord SDK behavior during Warframe launches.
-
-Features:
-
-- Real-time process monitoring
-- Automatic detection of Warframe launches
-- SDK handling system
-- Status tracking dashboard
-- Background operation support
-
----
-
-### ☣ OwHelper Integration
-
-Integrated support for OwHelper workflows.
-
-Includes:
-
-- OwHelper launcher integration
-- Runtime status detection
-- Process monitoring
-- Injection state tracking
-- Dedicated status dashboard
-
----
-
-### 🎨 Cinematic Interface
-
-The application features a custom modern UI inspired by premium game launchers.
-
-Included:
-
-- Dynamic themes
-- Animated transitions
-- Glass/acrylic effects
-- Interactive backgrounds
-- GPU accelerated rendering
-- Particle-based cinematic environment
-
----
-
-## 🌌 Cinematic Background Engine
-
-The interface includes a custom real-time background engine featuring:
-
-- Saturn-inspired space environment
-- Dense particle systems
-- Orbital ring simulations
-- Dynamic lighting
-- Mouse parallax effects
-- Atmospheric effects
-- Theme-based color adaptation
-
-Designed to create a unique launcher experience instead of a standard utility interface.
-
----
-
-## 🎵 Ambient Experience
-
-The launcher supports immersive audio features:
-
-- Background ambient music
-- Embedded audio resources
-- Volume controls
-- Mute system
-- Persistent user preferences
-
----
-
-## ⚙️ Dashboard
-
-The dashboard provides real-time information:
-
-- SDK Killer status
-- OwHelper status
-- Discord SDK status
-- Warframe monitoring state
-- Runtime logs
-- System information
-
----
-
-## 📝 Logging System
-
-Advanced logging interface with:
-
-- Real-time activity tracking
-- Severity indicators
-- Theme-adaptive console
-- Debug information
-- Runtime diagnostics
-
----
-
-## 🖥️ Technology
-
-Built using:
+## Tecnologias usadas
 
 - C#
 - .NET 8
-- WPF
-- XAML
+- WPF / XAML
 - Windows APIs
-- Hardware accelerated rendering
+- Sistemas próprios de animação e renderização
 
----
+## Status
 
-## 📦 Distribution
+Projeto em desenvolvimento.
 
-The project supports:
+Ainda tem muita coisa que pode ser melhorada, mas a base já está pronta e a ideia é continuar adicionando novas funções e deixando a experiência cada vez melhor.
 
-- Single-file publishing
-- Self-contained builds
-- Embedded resources
-- Portable execution
-
-Example:
+Feito por alguém que gosta de Warframe e gosta de criar coisas.
