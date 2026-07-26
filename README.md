@@ -2,19 +2,15 @@
 
 Warframe AIO Tool is a personal project made to bring multiple Warframe-related tools into one place.
 
-It started as a custom launcher, but slowly evolved into a complete utility with monitoring systems, real-time logs, custom settings, and a fully personalized interface.
+It started as a Warfraame launcher that executes Warframe without being Discord flagged, but slowly evolved into a complete utility.
 
 ## What it includes
 
 - Custom Warframe launcher
-- Real-time monitoring system
-- Dashboard with live statuses
-- Dynamic theme system
-- Detailed logging console
-- Automatic settings saving
-- Custom animations and transitions
-- GPU-powered cinematic background effects
-- Custom resources and integrations
+- OwHelper cheat injection
+- Launch Warframe
+- Settings tab
+- Spoofer tab
 
 ## About the UI
 
