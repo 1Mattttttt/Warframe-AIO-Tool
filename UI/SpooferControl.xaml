@@ -1,0 +1,251 @@
+<UserControl x:Class="GameLauncher.UI.SpooferControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GameLauncher.UI"
+             Foreground="#CDD6F4"
+             FontFamily="Segoe UI, Inter, Cascadia Code, sans-serif">
+
+    <UserControl.Resources>
+        <!-- Modern Button Base Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#89B4FA"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryLaunchButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#CBA6F7"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="22,10"/>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#1E1E2E"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#89B4FA"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="TutorialButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#F5C2E7"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="SolidCleanButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#E78284"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="20,10"/>
+        </Style>
+
+        <Style x:Key="AutoSpoofButton" TargetType="Button">
+            <Setter Property="Background" Value="#F38BA8"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="26,14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect x:Name="dropGlow" Color="#F38BA8" BlurRadius="16" ShadowDepth="0" Opacity="0.45"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.92"/>
+                                <Setter Property="Effect" TargetName="border">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#F38BA8" BlurRadius="22" ShadowDepth="0" Opacity="0.65"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="border" Value="#45475A"/>
+                                <Setter Property="Opacity" TargetName="border" Value="0.6"/>
+                                <Setter Property="Effect" TargetName="border" Value="{x:Null}"/>
+                                <Setter Property="Cursor" Value="No"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SpooferCard" TargetType="Border">
+            <Setter Property="Background" Value="#4414141C"/>
+            <Setter Property="BorderBrush" Value="#2B2B3F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="2" Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER SECTION -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="txtSpooferIcon" Text="🎭" FontSize="26" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtSpooferTitle" Text="Spoofer" FontSize="28" FontWeight="ExtraBold" Foreground="#CBA6F7" VerticalAlignment="Center">
+                        <TextBlock.Effect>
+                            <DropShadowEffect x:Name="glowSpooferTitle" Color="#CBA6F7" BlurRadius="12" ShadowDepth="0" Opacity="0.35"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Border x:Name="badgeSpooferModule" Background="#4425273C" BorderBrush="#CBA6F7" BorderThickness="1" CornerRadius="8" Padding="8,3" Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="txtSpooferBadgeText" Text="STABLE MODULE" FontSize="11" FontWeight="Bold" Foreground="#CBA6F7"/>
+                    </Border>
+                </StackPanel>
+                <TextBlock Text="Hardware &amp; Identity Management Suite" FontSize="13" Foreground="#A6ADC8" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- CARDS & ACTION BUTTONS CONTENT -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Vertical">
+                
+                <!-- AUTO SPOOF (STABLE) MAIN ACTION CARD -->
+                <Border x:Name="cardAutoSpoofBanner" Style="{StaticResource SpooferCard}" Background="#4426151E" BorderBrush="#F38BA8" BorderThickness="2" Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <TextBlock Text="🚨  Auto Spoof (Stable)" FontSize="18" FontWeight="Bold" Foreground="#F38BA8"/>
+                                <Border Background="#553B1822" CornerRadius="6" Padding="8,2" Margin="10,0,0,0">
+                                    <TextBlock Text="AUTOMATED WORKFLOW" FontSize="10" FontWeight="Bold" Foreground="#F38BA8"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="automated hardware identity workflow" FontSize="12" FontWeight="SemiBold" Foreground="#F38BA8" Margin="0,0,0,6"/>
+                            <TextBlock Text="Automates PSWOA, NetFixer, 10s Standby, Cache Cleanup, and Network Settings sequentially." 
+                                       FontSize="12" Foreground="#A6ADC8" TextWrapping="Wrap" LineHeight="17"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1" x:Name="btnAutoSpoof" Style="{StaticResource AutoSpoofButton}" Click="btnAutoSpoof_Click" VerticalAlignment="Center">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                <TextBlock x:Name="txtAutoSpoofBtnTitle" Text="⚡ Auto Spoof (Stable)" FontSize="14" FontWeight="Bold" Foreground="#11111B" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="txtAutoSpoofBtnSub" Text="automated workflow" FontSize="11" FontWeight="SemiBold" Foreground="#2A0F17" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- MODULE INDIVIDUAL CONTROLS BAR -->
+                <Border x:Name="cardModuleControls" Style="{StaticResource SpooferCard}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="MANUAL TOOL CONTROLS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" Margin="0,0,0,14"/>
+                        
+                        <WrapPanel Orientation="Horizontal">
+                            <Button x:Name="btnRunMainSpoofer" Content="🚀  Run Spoofer" Style="{StaticResource PrimaryLaunchButton}" Click="btnRunMainSpoofer_Click"/>
+                            <Button x:Name="btnRunNetFixer" Content="🔧  NetFixer" Style="{StaticResource SecondaryButton}" Click="btnRunNetFixer_Click"/>
+                            <Button x:Name="btnRunNetworkSettings" Content="🌐  Network Settings" Style="{StaticResource SecondaryButton}" Click="btnRunNetworkSettings_Click"/>
+                            <Button x:Name="btnRunDynamicIpChanger" Content="🔄  Dynamic IP Changer" Style="{StaticResource AccentButton}" Click="btnRunDynamicIpChanger_Click"/>
+                            <Button x:Name="btnCleanWarframeFiles" Content="🧹  Clean Warframe Files" Style="{StaticResource SolidCleanButton}" Click="btnCleanWarframeFiles_Click"/>
+                            <Button x:Name="btnSpooferTutorial" Content="📖  Tutorial" Style="{StaticResource TutorialButton}" Click="btnSpooferTutorial_Click"/>
+                        </WrapPanel>
+
+                        <!-- STATUS INDICATOR BAR -->
+                        <Border x:Name="cardStatusIndicator" Background="#550E0E16" BorderBrush="#222234" BorderThickness="1" CornerRadius="8" Padding="14,9" Margin="0,6,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="⚡ Status:" FontSize="12" FontWeight="Bold" Foreground="#A6ADC8" Margin="0,0,8,0"/>
+                                <TextBlock x:Name="txtSpooferStatus" Text="Ready (Standby)" FontSize="12" FontWeight="SemiBold" Foreground="#A6E3A1"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- SPOOFER EXECUTION LOG CONSOLE -->
+                <Border x:Name="cardLogConsole" Background="#4412121D" BorderBrush="#252538" BorderThickness="1" CornerRadius="14" Padding="18" Height="220">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📋" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="txtLogHeader" Text="SPOOFER EXECUTION LOGS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <ListBox Grid.Row="1" x:Name="lstSpooferLogs" Background="Transparent" BorderThickness="0"
+                                 FontFamily="Consolas, Cascadia Code, Courier New" FontSize="12" Padding="4" AlternationCount="2">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:SpooferLogItem}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                                        <TextBlock Text="{Binding Timestamp}" Foreground="#CBA6F7" FontWeight="SemiBold" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding Message}" Foreground="{Binding MessageHexColor}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="6,3"/>
+                                    <Setter Property="Margin" Value="0,1"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                            <Setter Property="Background" Value="#0AFFFFFF"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

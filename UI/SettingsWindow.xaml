@@ -1,0 +1,333 @@
+<Window x:Class="GameLauncher.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings - Warframe AIO Tool" Height="700" Width="880"
+        WindowStartupLocation="CenterOwner"
+        Background="#11111B" Foreground="#CDD6F4"
+        FontFamily="Segoe UI, Inter, Cascadia Code, sans-serif">
+
+    <Window.Resources>
+        <!-- Modern Button Base Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#89B4FA"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.88"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#1E1E2E"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="SectionCard" TargetType="Border">
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="22">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content Tab/Scroll Area -->
+            <RowDefinition Height="*"/>
+            <!-- Footer Buttons -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Margin="0,0,0,18">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="⚙️" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="SETTINGS &amp; CONFIGURATION" FontSize="20" FontWeight="Bold" Foreground="#89B4FA"/>
+                </StackPanel>
+                <TextBlock Text="Manage Warframe AIO Tool preferences, directories, and application behavior" FontSize="12" Foreground="#A6ADC8" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- MAIN SCROLLABLE SETTINGS CONTENT -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+            <StackPanel Orientation="Vertical">
+
+                <!-- 1. GENERAL SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="⚙️" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="GENERAL" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="chkStartMonitoringOnLaunch" Content="Start monitoring on application launch" Margin="0,4,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkStartMinimized" Content="Start minimized" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkAutoLaunchWarframe" Content="Auto-launch Warframe" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkEnableStartupAnimation" Content="Enable startup animation" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkEnableStartupJingle" Content="Enable startup completion jingle" Margin="0,0,0,12" Foreground="#CDD6F4" FontSize="13"/>
+
+                        <!-- Startup Window Mode -->
+                        <TextBlock Text="Startup Window Mode" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <ComboBox x:Name="cboStartupWindowMode" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontSize="13" FontWeight="Bold" Margin="0,0,0,4" Width="240" HorizontalAlignment="Left">
+                            <ComboBoxItem Content="Fullscreen (Maximized)" Tag="Fullscreen"/>
+                            <ComboBoxItem Content="Windowed" Tag="Windowed"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Border>
+
+                <!-- 1.5 AUDIO & MUSIC SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🎵" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="AUDIO &amp; MUSIC" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="chkEnableBackgroundMusic" Content="Enable Background Music" Margin="0,4,0,8" Foreground="#CDD6F4" FontSize="13"/>
+
+                        <Grid Margin="0,4,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Music Volume" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <Slider Grid.Column="1" x:Name="sliderSettingsMusicVolume" Minimum="0" Maximum="100" Value="80" VerticalAlignment="Center" ValueChanged="sliderSettingsMusicVolume_ValueChanged"/>
+                            <TextBlock Grid.Column="2" x:Name="txtSettingsMusicVolumeValue" Text="80%" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center" Margin="12,0,0,0" Width="40" TextAlignment="Right"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 1.6 APPLICATION BEHAVIOR SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🚀" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="APPLICATION BEHAVIOR" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Option 1: Start minimized to tray -->
+                        <CheckBox x:Name="chkStartMinimizedToTray" Content="Start Warframe AIO Tool minimized to tray" Margin="0,4,0,2" Foreground="#CDD6F4" FontSize="13"/>
+                        <TextBlock Text="When enabled, Warframe AIO Tool will start directly in the system tray instead of opening the main window." FontSize="11" Foreground="#A6ADC8" Margin="22,0,0,10" TextWrapping="Wrap"/>
+
+                        <!-- Option 2: Launch on system startup -->
+                        <CheckBox x:Name="chkLaunchOnSystemStartup" Content="Launch Warframe AIO Tool on system startup" Margin="0,0,0,2" Foreground="#CDD6F4" FontSize="13"/>
+                        <TextBlock Text="When enabled, Warframe AIO Tool will automatically start when Windows starts." FontSize="11" Foreground="#A6ADC8" Margin="22,0,0,10" TextWrapping="Wrap"/>
+
+                        <!-- Option 3: Launch minimized on system startup -->
+                        <CheckBox x:Name="chkLaunchMinimizedOnSystemStartup" Content="Launch minimized on system startup" Margin="0,0,0,2" Foreground="#CDD6F4" FontSize="13"/>
+                        <TextBlock Text="When enabled, Warframe AIO Tool will start with Windows and immediately open in the system tray." FontSize="11" Foreground="#A6ADC8" Margin="22,0,0,10" TextWrapping="Wrap"/>
+
+                        <!-- Option 4: Close button minimizes to tray -->
+                        <CheckBox x:Name="chkCloseToTray" Content="Close button minimizes to tray" Margin="0,0,0,2" Foreground="#CDD6F4" FontSize="13"/>
+                        <TextBlock Text="When enabled, closing the window keeps Warframe AIO Tool running in the background." FontSize="11" Foreground="#A6ADC8" Margin="22,0,0,4" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 2. LAUNCHER SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🎮" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="LAUNCHER" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Epic Launch URI -->
+                        <TextBlock Text="Epic Launch URI" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <TextBox x:Name="txtEpicLaunchUri" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" FontFamily="Consolas, Cascadia Code, Courier New" Margin="0,0,0,12" TextWrapping="Wrap"/>
+
+                        <!-- Steam App ID -->
+                        <TextBlock Text="Steam App ID" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                        <TextBox x:Name="txtSteamAppId" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,0,12"/>
+
+                        <!-- Standalone Launcher Path -->
+                        <TextBlock Text="Standalone Launcher Path" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txtStandaloneLauncherPath" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Content="Browse..." Style="{StaticResource SecondaryButton}" Padding="12,6" Click="btnBrowseStandalone_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 3. WARFRAME SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="⚔️" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="WARFRAME" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Auto Detect Paths Button -->
+                        <Button x:Name="btnAutoDetectPaths" Content="🔍  Auto Detect Paths" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="14,7" Margin="0,0,0,12" Click="btnAutoDetectPaths_Click"/>
+
+                        <!-- Warframe installation folder -->
+                        <TextBlock Text="Warframe Installation Folder" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txtWarframeFolder" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Content="Browse..." Style="{StaticResource SecondaryButton}" Padding="12,6" Click="btnBrowseWarframeFolder_Click"/>
+                        </Grid>
+
+                        <!-- Cache folder -->
+                        <TextBlock Text="Cache Folder" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txtCacheFolder" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Content="Browse..." Style="{StaticResource SecondaryButton}" Padding="12,6" Click="btnBrowseCacheFolder_Click"/>
+                        </Grid>
+
+                        <!-- Discord SDK path -->
+                        <TextBlock Text="Discord SDK Path" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txtDiscordSdkPath" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Content="Browse..." Style="{StaticResource SecondaryButton}" Padding="12,6" Click="btnBrowseDiscordSdk_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 4. MAINTENANCE SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🛠️" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="MAINTENANCE" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Launch threshold -->
+                        <TextBlock Text="Launch Threshold (Launches before action)" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <TextBox x:Name="txtLaunchThreshold" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,0,12" Width="150" HorizontalAlignment="Left"/>
+
+                        <!-- Enable cache cleaner -->
+                        <CheckBox x:Name="chkEnableCacheCleaner" Content="Enable Cache Cleaner" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 5. EXTERNAL TOOLS SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🧩" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXTERNAL TOOLS &amp; INTEGRATIONS" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="chkEnableOwHelper" Content="Enable OwHelper integration" Margin="0,4,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkLaunchOwHelperHidden" Content="Launch OwHelper in background (Hidden)" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 6. LOGGING SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="📋" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="LOGGING" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="chkEnableFileLogging" Content="Enable File Logging" Margin="0,4,0,8" Foreground="#CDD6F4" FontSize="13"/>
+
+                        <TextBlock Text="Max Log Entries" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <TextBox x:Name="txtMaxLogEntries" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,0,12" Width="150" HorizontalAlignment="Left"/>
+
+                        <Button x:Name="btnExportLogs" Content="📥  Export Logs" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Padding="14,7" Click="btnExportLogs_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 7. HARDWARE IDENTITY (GUID) SECTION -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="🆔" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="HARDWARE IDENTITY (GUID)" FontSize="14" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="chkEnableGuidSpoof" Content="Enable Machine GUID Spoofing" Margin="0,4,0,8" Foreground="#CDD6F4" FontSize="13"/>
+
+                        <TextBlock Text="Current Machine GUID" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <TextBox x:Name="txtCurrentGuid" IsReadOnly="True" Background="#11111B" Foreground="#89B4FA" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" FontFamily="Consolas, Cascadia Code, Courier New" Margin="0,0,0,12"/>
+
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <Button x:Name="btnGenerateNewGuid" Content="🎲  Generate New GUID" Style="{StaticResource ModernButton}" Click="btnGenerateGuid_Click"/>
+                        </WrapPanel>
+
+                        <TextBlock Text="GUID History" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>
+                        <ListBox x:Name="lstGuidHistory" Height="90" Background="#11111B" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" FontFamily="Consolas, Cascadia Code, Courier New" FontSize="11" Padding="4"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ABOUT & CREATOR CREDITS SECTION -->
+                <Border Style="{StaticResource SectionCard}" BorderBrush="#CBA6F7" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" CornerRadius="28" Width="56" Height="56" Margin="0,0,16,0" VerticalAlignment="Center" BorderBrush="#CBA6F7" BorderThickness="2">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#CBA6F7" BlurRadius="12" ShadowDepth="0" Opacity="0.4"/>
+                            </Border.Effect>
+                            <Image x:Name="imgSettingsProfile" Source="pack://application:,,,/Assets/profile.png" Width="56" Height="56" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Warframe AIO Tool - Complete Companion Suite" FontSize="14" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="made by #1 Matt fan in rffc with love" FontSize="13" FontWeight="SemiBold" Foreground="#CBA6F7" Margin="0,3,0,4"/>
+                            <TextBlock Text="Designed for seamless Warframe launching, SDK killer protection, and identity spoofer utilities." FontSize="11" Foreground="#A6ADC8" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- FOOTER BUTTONS -->
+        <Grid Grid.Row="2" Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" x:Name="btnRestoreDefaults" Content="Restore Defaults" Style="{StaticResource SecondaryButton}" Click="btnRestoreDefaults_Click"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnCancel" Content="Cancel" Style="{StaticResource SecondaryButton}" Click="btnCancel_Click"/>
+                <Button x:Name="btnSave" Content="Save" Style="{StaticResource ModernButton}" Margin="0" Click="btnSave_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
