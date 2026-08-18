@@ -10,25 +10,19 @@ using GameLauncher.Logging;
 
 namespace GameLauncher.Core;
 
-/// <summary>
-/// Dedicated, lightweight Ambient Music Service:
-/// 1. Extracts & plays embedded MP3 music resources natively in background (supporting single-file publish).
-/// 2. Implements smooth fade-in at startup and smooth fade-out at application shutdown.
-/// 3. Asynchronous non-blocking loading & stream extraction to guarantee zero UI stutters.
-/// 4. Manages volume, mute/unmute, and settings persistence.
-/// </summary>
+// Background music service for playing ambient tracks from embedded resources
 public class AmbientMusicManager
 {
     private readonly AppSettings _settings;
     private readonly LoggerService _logger;
-    private readonly MediaPlayer _mediaPlayer = new MediaPlayer();
+    private readonly MediaPlayer _mediaPlayer = new();
     private readonly Dispatcher _dispatcher;
 
     private string? _extractedMusicPath;
-    private bool _isInitialized = false;
-    private bool _isPlaying = false;
-    private bool _isPaused = false;
-    private bool _isFading = false;
+    private bool _isInitialized;
+    private bool _isPlaying;
+    private bool _isPaused;
+    private bool _isFading;
     private TimeSpan _pausedPosition = TimeSpan.Zero;
 
     public event Action<double>? VolumeChanged;
@@ -101,6 +95,7 @@ public class AmbientMusicManager
         }
     }
 
+    // Extract embedded MP3 to local cache folder if not present, then start playback
     public void InitializeAndStart()
     {
         Task.Run(async () =>
@@ -120,7 +115,7 @@ public class AmbientMusicManager
 
                 if (string.IsNullOrEmpty(mp3ResourceName))
                 {
-                    _logger.LogWarning("Ambient Music System: Embedded MP3 resource not found.");
+                    _logger.LogWarning("Ambient music resource not found in assembly.");
                     return;
                 }
 
@@ -128,6 +123,7 @@ public class AmbientMusicManager
                 {
                     if (stream != null)
                     {
+                        // Extract only if file missing or byte size changed
                         if (!File.Exists(targetExtractedFile) || new FileInfo(targetExtractedFile).Length != stream.Length)
                         {
                             using var destStream = File.Create(targetExtractedFile);
@@ -153,13 +149,13 @@ public class AmbientMusicManager
                         });
 
                         await FadeInAsync();
-                        _logger.LogInfo("Ambient Music System initialized and started with smooth fade-in.");
+                        _logger.LogInfo("Ambient music initialized.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to initialize Ambient Music System: {ex.Message}");
+                _logger.LogError($"Failed initializing ambient music: {ex.Message}");
             }
         });
     }
@@ -244,11 +240,10 @@ public class AmbientMusicManager
                 _mediaPlayer.Pause();
                 _isPlaying = false;
                 _isPaused = true;
-                _logger.LogInfo($"Ambient Music System paused at {_pausedPosition.TotalSeconds:F1}s.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to pause ambient music: {ex.Message}");
+                _logger.LogError($"Failed pausing music: {ex.Message}");
             }
         });
     }
@@ -267,25 +262,18 @@ public class AmbientMusicManager
                 _mediaPlayer.Play();
                 _isPlaying = true;
                 _isPaused = false;
-                _logger.LogInfo($"Ambient Music System resumed from {_pausedPosition.TotalSeconds:F1}s.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to resume ambient music: {ex.Message}");
+                _logger.LogError($"Failed resuming music: {ex.Message}");
             }
         });
     }
 
     public void TogglePlayPause()
     {
-        if (_isPlaying)
-        {
-            Pause();
-        }
-        else
-        {
-            Resume();
-        }
+        if (_isPlaying) Pause();
+        else Resume();
     }
 
     public void ToggleMute()
@@ -318,7 +306,7 @@ public class AmbientMusicManager
 
     private void MediaPlayer_MediaEnded(object? sender, EventArgs e)
     {
-        // Loop ambient track seamlessly
+        // Loop playback seamlessly when track finishes
         RunOnUIThread(() =>
         {
             _mediaPlayer.Position = TimeSpan.Zero;
@@ -328,19 +316,13 @@ public class AmbientMusicManager
 
     private void MediaPlayer_MediaFailed(object? sender, ExceptionEventArgs e)
     {
-        _logger.LogError($"Ambient Music playback error: {e.ErrorException.Message}");
+        _logger.LogError($"Playback error: {e.ErrorException.Message}");
         _isPlaying = false;
     }
 
     private void RunOnUIThread(Action action)
     {
-        if (_dispatcher.CheckAccess())
-        {
-            action();
-        }
-        else
-        {
-            _dispatcher.InvokeAsync(action);
-        }
+        if (_dispatcher.CheckAccess()) action();
+        else _dispatcher.InvokeAsync(action);
     }
 }

@@ -32,7 +32,7 @@ public partial class MainWindow : Window
     private SystemTrayManager? _trayManager;
     private bool _isExitingFromTray;
 
-    // ── Multi-Layer Ambient Mouse Lighting Engine Fields ───────────
+    // Mouse lighting & dynamic UI state
     private Point _targetMousePos = new Point(0.5, 0.5);
     private Point _coreGlowPos = new Point(0.5, 0.5);
     private Point _ambientGlowPos = new Point(0.5, 0.5);
@@ -1474,7 +1474,7 @@ public partial class MainWindow : Window
         });
     }
 
-    // ── Micro Animation Helpers ──────────────────────────────────
+    // UI animation helpers
 
     private void PulseIconAnimation(TextBlock icon)
     {
@@ -1570,7 +1570,7 @@ public partial class MainWindow : Window
         });
     }
 
-    // ── Multi-Layer Ambient Mouse Lighting Engine Handlers ─────────
+    // Ambient lighting rendering loop
 
     private void Window_MouseMove(object sender, MouseEventArgs e)
     {
