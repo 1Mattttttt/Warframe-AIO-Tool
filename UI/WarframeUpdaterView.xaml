@@ -1,0 +1,252 @@
+<UserControl x:Class="GameLauncher.UI.WarframeUpdaterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:core="clr-namespace:GameLauncher.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="900"
+             FontFamily="Segoe UI, Inter, Cascadia Code, sans-serif">
+
+    <UserControl.Resources>
+        <!-- CATPPUCCIN THEME BRUSHES -->
+        <SolidColorBrush x:Key="CatppuccinGreen" Color="#A6E3A1"/>
+        <SolidColorBrush x:Key="CatppuccinPeach" Color="#FAB387"/>
+        <SolidColorBrush x:Key="CatppuccinBlue" Color="#89B4FA"/>
+        <SolidColorBrush x:Key="CatppuccinMauve" Color="#CBA6F7"/>
+        <SolidColorBrush x:Key="CatppuccinRed" Color="#F38BA8"/>
+        <SolidColorBrush x:Key="CatppuccinYellow" Color="#F9E2AF"/>
+
+        <!-- CARD STYLE -->
+        <Style x:Key="UpdaterCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#161624"/>
+            <Setter Property="BorderBrush" Value="#2B2B3F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="14,12"/>
+        </Style>
+
+        <!-- ACTION BUTTON STYLE -->
+        <Style x:Key="UpdaterBtnStyle" TargetType="Button">
+            <Setter Property="Background" Value="#1C1D2E"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#2F3045"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#262842"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#89B4FA"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#141524"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- PRIMARY LAUNCH BUTTON STYLE -->
+        <Style x:Key="UpdaterLaunchBtnStyle" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#A6E3A1" Offset="0"/>
+                        <GradientStop Color="#94E2D5" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="Padding" Value="20,8"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.92"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="16">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                
+                <!-- 1. Game Launcher Settings (Warframe) -->
+                <Border Style="{StaticResource UpdaterCardStyle}" Margin="0,0,0,12">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Game Launcher Settings (Warframe)" FontSize="13" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,10"/>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="170"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Game Folder -->
+                            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                <TextBlock Text="Game Folder (auto detect warframe)" FontSize="10" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" x:Name="txtGameFolderPath" Background="#0F0F1A" Foreground="#CDD6F4" BorderBrush="#2B2B3F" BorderThickness="1" Padding="8,5" FontSize="11" FontFamily="Consolas, Inter" VerticalContentAlignment="Center"/>
+                                    <Button Grid.Column="1" x:Name="btnBrowseFolder" Content="Browse" Style="{StaticResource UpdaterBtnStyle}" Click="btnBrowseFolder_Click" Margin="6,0,0,0" Padding="10,4"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Language -->
+                            <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                <TextBlock Text="Language" FontSize="10" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="cboLanguage" Background="#0F0F1A" Foreground="#CDD6F4" BorderBrush="#2B2B3F" Padding="8,5" FontSize="11" SelectionChanged="cboLanguage_SelectionChanged">
+                                    <ComboBoxItem Content="pt (Portuguese)" Tag="pt"/>
+                                    <ComboBoxItem Content="en (English)" Tag="en"/>
+                                    <ComboBoxItem Content="es (Spanish)" Tag="es"/>
+                                    <ComboBoxItem Content="fr (French)" Tag="fr"/>
+                                    <ComboBoxItem Content="de (German)" Tag="de"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Graphics -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Graphics" FontSize="10" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="cboGraphicsApi" Background="#0F0F1A" Foreground="#CDD6F4" BorderBrush="#2B2B3F" Padding="8,5" FontSize="11" SelectionChanged="cboGraphicsApi_SelectionChanged">
+                                    <ComboBoxItem Content="dx11 (DirectX 11)" Tag="dx11"/>
+                                    <ComboBoxItem Content="dx12 (DirectX 12)" Tag="dx12"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 2. Status Area -->
+                <Border Background="#12121D" BorderBrush="#232436" BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,16">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Status: " FontSize="11" FontWeight="Bold" Foreground="#A6ADC8"/>
+                            <TextBlock x:Name="lblStatus" Text="Manifest not loaded" FontSize="11" FontWeight="SemiBold" Foreground="#FAB387"/>
+                        </StackPanel>
+                        <!-- Active Progress Bar (when running background task) -->
+                        <Border x:Name="borderProgressArea" Margin="0,8,0,0" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <TextBlock x:Name="txtProgressMessage" Text="Verifying files..." FontSize="10" Foreground="#89B4FA"/>
+                                    <TextBlock x:Name="txtProgressDetails" Text="" FontSize="10" Foreground="#A6ADC8" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <ProgressBar Grid.Row="1" x:Name="progressBar" Height="6" Background="#0F0F1A" Foreground="#89B4FA" BorderThickness="0" Value="0" Maximum="100"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Execution Logs Console -->
+                <Border Style="{StaticResource UpdaterCardStyle}" Margin="0,0,0,16">
+                    <StackPanel Orientation="Vertical">
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Execution Logs" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button x:Name="btnCopyLogs" Content="Copy Logs" Style="{StaticResource UpdaterBtnStyle}" Click="btnCopyLogs_Click" Margin="0,0,6,0" Padding="8,4"/>
+                                <Button x:Name="btnClearLogs" Content="Clear" Style="{StaticResource UpdaterBtnStyle}" Click="btnClearLogs_Click" Margin="0" Padding="8,4"/>
+                            </StackPanel>
+                        </Grid>
+                        <Border Background="#0A0A0C" BorderBrush="#222228" BorderThickness="1" CornerRadius="6" Padding="4">
+                            <TextBox x:Name="txtLogConsole"
+                                     Height="140"
+                                     IsReadOnly="True"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     VerticalScrollBarVisibility="Auto"
+                                     HorizontalScrollBarVisibility="Auto"
+                                     Background="#0A0A0C" Foreground="#D0D0D0"
+                                     BorderThickness="0"
+                                     Padding="8"
+                                     FontFamily="Consolas" FontSize="11"
+                                     SelectionBrush="#007ACC" SelectionOpacity="0.4"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- 3. Main Buttons -->
+                <WrapPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <Button x:Name="btnLoadManifest" Content="Load Manifest" Style="{StaticResource UpdaterBtnStyle}" Click="btnLoadManifest_Click" Margin="0,0,8,8"/>
+                    <Button x:Name="btnCancel" Content="Cancel" Style="{StaticResource UpdaterBtnStyle}" Click="btnCancel_Click" IsEnabled="False"/>
+                </WrapPanel>
+
+                <!-- 4. Actions -->
+                <Border Style="{StaticResource UpdaterCardStyle}" Margin="0,0,0,16">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Actions" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,10"/>
+                        
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <Button x:Name="btnUpdateExe" Content="Update Warframe.x64.exe" Style="{StaticResource UpdaterBtnStyle}" Click="btnUpdateExe_Click"/>
+                            <Button x:Name="btnDownloadTools" Content="Download Tools" Style="{StaticResource UpdaterBtnStyle}" Click="btnDownloadTools_Click"/>
+                            <Button x:Name="btnDownloadCache" Content="Download Cache" Style="{StaticResource UpdaterBtnStyle}" Click="btnDownloadCache_Click"/>
+                        </WrapPanel>
+
+                        <WrapPanel Orientation="Horizontal">
+                            <Button x:Name="btnContentUpdate" Content="Content Update" Style="{StaticResource UpdaterBtnStyle}" Click="btnContentUpdate_Click"/>
+                            <Button x:Name="btnRepairCache" Content="Repair Cache" Style="{StaticResource UpdaterBtnStyle}" Click="btnRepairCache_Click"/>
+                            <Button x:Name="btnOptimize" Content="Optimize / Defrag" Style="{StaticResource UpdaterBtnStyle}" Click="btnOptimize_Click"/>
+                            <Button x:Name="btnLaunchGame" Content="Launch Game" Style="{StaticResource UpdaterLaunchBtnStyle}" Click="btnLaunchGame_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 5. Developer -->
+                <Border Style="{StaticResource UpdaterCardStyle}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Developer" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" Margin="0,0,0,10"/>
+                        
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <Button x:Name="btnAnalyzeInstallation" Content="Analyze Installation" Style="{StaticResource UpdaterBtnStyle}" Click="btnAnalyzeInstallation_Click"/>
+                        </WrapPanel>
+
+                        <WrapPanel Orientation="Horizontal">
+                            <Button x:Name="btnTestSingleFile" Content="Single File Test" Style="{StaticResource UpdaterBtnStyle}" Click="btnTestSingleFile_Click"/>
+                            <Button x:Name="btnTestMultiFile" Content="Multi-File Test" Style="{StaticResource UpdaterBtnStyle}" Click="btnTestMultiFile_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -50,6 +50,7 @@ public static class Program
         var steamLauncher = new SteamLauncher(settings, logger);
         var standaloneLauncher = new StandaloneLauncher(settings, logger);
         var launcherManager = new LauncherManager(settings, logger, epicLauncher, steamLauncher, standaloneLauncher);
+        var updateManager = new WarframeUpdateManager(settings, logger);
         using var monitor = new WarframeMonitor(settings, logger);
 
         logger.LogReceived += (sender, entry) =>
@@ -85,7 +86,7 @@ public static class Program
             monitor.Stop();
         };
 
-        var mainWindow = new MainWindow(settings, logger, monitor, sdkManager, launcherManager);
+        var mainWindow = new MainWindow(settings, logger, monitor, sdkManager, launcherManager, new ExternalLauncher(settings, logger), updateManager);
         app.Run(mainWindow);
     }
 

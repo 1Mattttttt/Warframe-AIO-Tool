@@ -36,8 +36,9 @@ public class StandaloneLauncher
 
         try
         {
-            _logger.LogInfo($"Executable path: {resolvedPath}");
-            const string arguments = "-graphicsDriver:dx11 -gpuPreference:2 -cluster:public -language:en";
+            string api = string.IsNullOrWhiteSpace(_settings.WarframeGraphicsApi) ? "dx11" : _settings.WarframeGraphicsApi;
+            string lang = string.IsNullOrWhiteSpace(_settings.WarframeLanguage) ? "en" : _settings.WarframeLanguage;
+            string arguments = $"-graphicsDriver:{api} -gpuPreference:2 -cluster:public -language:{lang}";
             _logger.LogInfo($"Arguments: {arguments}");
 
             Process.Start(new ProcessStartInfo

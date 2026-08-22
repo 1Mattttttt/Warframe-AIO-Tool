@@ -211,7 +211,7 @@
 
                         <!-- Discord SDK path -->
                         <TextBlock Text="Discord SDK Path" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
-                        <Grid Margin="0,0,0,4">
+                        <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -219,6 +219,44 @@
                             <TextBox Grid.Column="0" x:Name="txtDiscordSdkPath" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,7" FontSize="12" Margin="0,0,8,0"/>
                             <Button Grid.Column="1" Content="Browse..." Style="{StaticResource SecondaryButton}" Padding="12,6" Click="btnBrowseDiscordSdk_Click"/>
                         </Grid>
+
+                        <!-- Language & Graphics API Controls -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Language -->
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="Language" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="cboWarframeLanguage" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontSize="12">
+                                    <ComboBoxItem Content="English (en)" Tag="en"/>
+                                    <ComboBoxItem Content="Português (pt)" Tag="pt"/>
+                                    <ComboBoxItem Content="Español (es)" Tag="es"/>
+                                    <ComboBoxItem Content="Français (fr)" Tag="fr"/>
+                                    <ComboBoxItem Content="Deutsch (de)" Tag="de"/>
+                                    <ComboBoxItem Content="Italiano (it)" Tag="it"/>
+                                    <ComboBoxItem Content="日本語 (ja)" Tag="ja"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Graphics API -->
+                            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                <TextBlock Text="Graphics API" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="cboWarframeGraphicsApi" Background="#181825" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontSize="12">
+                                    <ComboBoxItem Content="DirectX 11 (dx11)" Tag="dx11"/>
+                                    <ComboBoxItem Content="DirectX 12 (dx12)" Tag="dx12"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Auto-Update Toggles -->
+                        <CheckBox x:Name="chkAutoCheckForUpdates" Content="Auto Check for Updates on launch" Margin="0,4,0,6" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkAutoRepair" Content="Auto Repair missing or corrupted game files" Margin="0,0,0,6" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkAutoUpdate" Content="Auto Update game files on startup" Margin="0,0,0,6" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkDownloadCacheOnUpdate" Content="Include Cache content in automatic updates" Margin="0,0,0,6" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkDownloadToolsOnUpdate" Content="Include Tools content in automatic updates" Margin="0,0,0,4" Foreground="#CDD6F4" FontSize="13"/>
                     </StackPanel>
                 </Border>
 

@@ -452,6 +452,7 @@
                             <Border Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="10" Padding="4">
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="btnTabDashboard" Content="⚡  Dashboard" Style="{StaticResource SecondaryButton}" Click="btnTabDashboard_Click" Margin="0,0,4,0" Padding="14,6"/>
+                                    <Button x:Name="btnTabUpdater" Content="🚀  Updater" Style="{StaticResource SecondaryButton}" Click="btnTabUpdater_Click" Margin="0,0,4,0" Padding="14,6"/>
                                     <Button x:Name="btnTabSpoofer" Content="🎭  Spoofer" Style="{StaticResource SecondaryButton}" Click="btnTabSpoofer_Click" Margin="0" Padding="14,6"/>
                                 </StackPanel>
                             </Border>
@@ -694,6 +695,14 @@
                             <TranslateTransform x:Name="transSpoofer" Y="12"/>
                         </Grid.RenderTransform>
                         <ui:SpooferControl x:Name="spooferControlView"/>
+                    </Grid>
+
+                    <!-- WARFRAME UPDATER MODULE VIEW (CONTAINER TAB) -->
+                    <Grid x:Name="gridUpdaterView" Grid.Row="1" Grid.RowSpan="3" Visibility="Collapsed" Opacity="0.0" RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <TranslateTransform x:Name="transUpdater" Y="12"/>
+                        </Grid.RenderTransform>
+                        <ui:WarframeUpdaterView x:Name="updaterControlView"/>
                     </Grid>
                 </Grid>
             </Grid>

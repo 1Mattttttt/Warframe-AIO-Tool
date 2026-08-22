@@ -27,6 +27,7 @@ public partial class MainWindow : Window
     private readonly ExternalLauncher _externalLauncher;
     private readonly SpooferManager _spooferManager;
     private readonly GuidSpoofManager _guidSpoofManager;
+    private readonly WarframeUpdateManager _updateManager;
 
     private readonly AmbientMusicManager _ambientMusicManager;
     private SystemTrayManager? _trayManager;
@@ -68,6 +69,11 @@ public partial class MainWindow : Window
     }
 
     public MainWindow(AppSettings settings, LoggerService logger, WarframeMonitor monitor, DiscordSdkManager sdkManager, LauncherManager launcherManager, ExternalLauncher externalLauncher)
+        : this(settings, logger, monitor, sdkManager, launcherManager, externalLauncher, new WarframeUpdateManager(settings, logger))
+    {
+    }
+
+    public MainWindow(AppSettings settings, LoggerService logger, WarframeMonitor monitor, DiscordSdkManager sdkManager, LauncherManager launcherManager, ExternalLauncher externalLauncher, WarframeUpdateManager updateManager)
     {
         InitializeComponent();
 
@@ -77,6 +83,7 @@ public partial class MainWindow : Window
         _sdkManager = sdkManager ?? throw new ArgumentNullException(nameof(sdkManager));
         _launcherManager = launcherManager ?? throw new ArgumentNullException(nameof(launcherManager));
         _externalLauncher = externalLauncher ?? throw new ArgumentNullException(nameof(externalLauncher));
+        _updateManager = updateManager ?? throw new ArgumentNullException(nameof(updateManager));
         _spooferManager = new SpooferManager(_settings, _logger);
         _guidSpoofManager = new GuidSpoofManager(_settings, _logger);
 
@@ -88,6 +95,9 @@ public partial class MainWindow : Window
         sliderAudioVolume.Value = _ambientMusicManager.Volume;
         txtAudioMuteIcon.Text = _ambientMusicManager.IsMuted ? "🔇" : "🔊";
         txtAudioVolumeValue.Text = $"{(int)_ambientMusicManager.Volume}%";
+
+        // Initialize Warframe Updater View
+        updaterControlView.Initialize(_settings, _logger, _updateManager);
 
         // Start ambient music playback asynchronously
         _ambientMusicManager.InitializeAndStart();
@@ -1126,6 +1136,11 @@ public partial class MainWindow : Window
         SwitchTab("Dashboard");
     }
 
+    private void btnTabUpdater_Click(object sender, RoutedEventArgs e)
+    {
+        SwitchTab("Updater");
+    }
+
     private void btnTabSpoofer_Click(object sender, RoutedEventArgs e)
     {
         SwitchTab("Spoofer");
@@ -1136,10 +1151,13 @@ public partial class MainWindow : Window
         if (_isTabTransitionRunning) return;
 
         bool isDashboard = string.Equals(targetTab, "Dashboard", StringComparison.OrdinalIgnoreCase);
+        bool isUpdater = string.Equals(targetTab, "Updater", StringComparison.OrdinalIgnoreCase);
+        bool isSpoofer = string.Equals(targetTab, "Spoofer", StringComparison.OrdinalIgnoreCase);
 
         // Check if already active
         if (isDashboard && gridDashboardView.Visibility == Visibility.Visible) return;
-        if (!isDashboard && gridSpooferView.Visibility == Visibility.Visible) return;
+        if (isUpdater && gridUpdaterView.Visibility == Visibility.Visible) return;
+        if (isSpoofer && gridSpooferView.Visibility == Visibility.Visible) return;
 
         _isTabTransitionRunning = true;
 
@@ -1148,21 +1166,39 @@ public partial class MainWindow : Window
         var easeOut = new CubicEase { EasingMode = EasingMode.EaseOut };
         var easeIn = new CubicEase { EasingMode = EasingMode.EaseIn };
 
-        Grid hideGrid = isDashboard ? gridSpooferView : gridDashboardView;
-        Grid showGrid = isDashboard ? gridDashboardView : gridSpooferView;
-        TranslateTransform hideTrans = isDashboard ? transSpoofer : transDashboard;
-        TranslateTransform showTrans = isDashboard ? transDashboard : transSpoofer;
+        Grid showGrid = isDashboard ? gridDashboardView : (isUpdater ? gridUpdaterView : gridSpooferView);
+        TranslateTransform showTrans = isDashboard ? transDashboard : (isUpdater ? transUpdater : transSpoofer);
+
+        List<Grid> hideGrids = new();
+        List<TranslateTransform> hideTransforms = new();
+
+        if (!isDashboard && gridDashboardView.Visibility == Visibility.Visible)
+        {
+            hideGrids.Add(gridDashboardView);
+            hideTransforms.Add(transDashboard);
+        }
+        if (!isUpdater && gridUpdaterView.Visibility == Visibility.Visible)
+        {
+            hideGrids.Add(gridUpdaterView);
+            hideTransforms.Add(transUpdater);
+        }
+        if (!isSpoofer && gridSpooferView.Visibility == Visibility.Visible)
+        {
+            hideGrids.Add(gridSpooferView);
+            hideTransforms.Add(transSpoofer);
+        }
 
         btnTabDashboard.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isDashboard ? "#89B4FA" : "#A6ADC8"));
-        btnTabSpoofer.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isDashboard ? "#A6ADC8" : "#89B4FA"));
+        btnTabUpdater.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isUpdater ? "#89B4FA" : "#A6ADC8"));
+        btnTabSpoofer.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isSpoofer ? "#89B4FA" : "#A6ADC8"));
 
-        // Fade out current grid
+        // Fade out current grids
         var fadeOutAnim = new DoubleAnimation(1.0, 0.0, fadeOutDuration) { EasingFunction = easeIn };
         var slideOutAnim = new DoubleAnimation(0.0, -10.0, fadeOutDuration) { EasingFunction = easeIn };
 
         fadeOutAnim.Completed += (s, e) =>
         {
-            hideGrid.Visibility = Visibility.Collapsed;
+            foreach (var g in hideGrids) g.Visibility = Visibility.Collapsed;
 
             showGrid.Visibility = Visibility.Visible;
             showGrid.Opacity = 0.0;
@@ -1180,8 +1216,8 @@ public partial class MainWindow : Window
             showGrid.BeginAnimation(OpacityProperty, fadeInAnim);
         };
 
-        hideTrans.BeginAnimation(TranslateTransform.YProperty, slideOutAnim);
-        hideGrid.BeginAnimation(OpacityProperty, fadeOutAnim);
+        foreach (var t in hideTransforms) t.BeginAnimation(TranslateTransform.YProperty, slideOutAnim);
+        foreach (var g in hideGrids) g.BeginAnimation(OpacityProperty, fadeOutAnim);
     }
 
     private void OnLogReceived(object? sender, LogEntry entry)

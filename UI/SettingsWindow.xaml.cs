@@ -63,6 +63,34 @@ public partial class SettingsWindow : Window
         txtCacheFolder.Text = _settings.CacheFolder;
         txtDiscordSdkPath.Text = _settings.DiscordSdkPath;
 
+        // Language Combo
+        cboWarframeLanguage.SelectedIndex = 0;
+        foreach (ComboBoxItem item in cboWarframeLanguage.Items)
+        {
+            if (string.Equals(item.Tag?.ToString(), _settings.WarframeLanguage, StringComparison.OrdinalIgnoreCase))
+            {
+                cboWarframeLanguage.SelectedItem = item;
+                break;
+            }
+        }
+
+        // Graphics API Combo
+        cboWarframeGraphicsApi.SelectedIndex = 0;
+        foreach (ComboBoxItem item in cboWarframeGraphicsApi.Items)
+        {
+            if (string.Equals(item.Tag?.ToString(), _settings.WarframeGraphicsApi, StringComparison.OrdinalIgnoreCase))
+            {
+                cboWarframeGraphicsApi.SelectedItem = item;
+                break;
+            }
+        }
+
+        chkAutoCheckForUpdates.IsChecked = _settings.AutoCheckForUpdates;
+        chkAutoRepair.IsChecked = _settings.AutoRepair;
+        chkAutoUpdate.IsChecked = _settings.AutoUpdate;
+        chkDownloadCacheOnUpdate.IsChecked = _settings.DownloadCacheOnUpdate;
+        chkDownloadToolsOnUpdate.IsChecked = _settings.DownloadToolsOnUpdate;
+
         // Maintenance
         txtLaunchThreshold.Text = _settings.LaunchesBeforeAction.ToString();
         chkEnableCacheCleaner.IsChecked = _settings.EnableCacheCleaner;
@@ -370,6 +398,22 @@ public partial class SettingsWindow : Window
         _settings.WarframeInstallFolder = txtWarframeFolder.Text?.Trim() ?? string.Empty;
         _settings.CacheFolder = txtCacheFolder.Text?.Trim() ?? string.Empty;
         _settings.DiscordSdkPath = txtDiscordSdkPath.Text?.Trim() ?? string.Empty;
+
+        if (cboWarframeLanguage.SelectedItem is ComboBoxItem langItem && langItem.Tag is string langTag)
+        {
+            _settings.WarframeLanguage = langTag;
+        }
+
+        if (cboWarframeGraphicsApi.SelectedItem is ComboBoxItem apiItem && apiItem.Tag is string apiTag)
+        {
+            _settings.WarframeGraphicsApi = apiTag;
+        }
+
+        _settings.AutoCheckForUpdates = chkAutoCheckForUpdates.IsChecked == true;
+        _settings.AutoRepair = chkAutoRepair.IsChecked == true;
+        _settings.AutoUpdate = chkAutoUpdate.IsChecked == true;
+        _settings.DownloadCacheOnUpdate = chkDownloadCacheOnUpdate.IsChecked == true;
+        _settings.DownloadToolsOnUpdate = chkDownloadToolsOnUpdate.IsChecked == true;
 
         _settings.LaunchesBeforeAction = threshold;
         _settings.EnableCacheCleaner = chkEnableCacheCleaner.IsChecked == true;

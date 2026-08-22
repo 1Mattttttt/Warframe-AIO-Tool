@@ -47,9 +47,16 @@ public class AppSettings
     public double BackgroundMusicVolume { get; set; } = 80.0;
     public bool BackgroundMusicMuted { get; set; } = false;
 
-    // Warframe Paths
+    // Warframe Paths & Launcher Configuration
     public string WarframeInstallFolder { get; set; } = @"C:\Program Files\Epic Games\Warframe\Downloaded";
     public string CacheFolder { get; set; } = @"C:\Program Files\Epic Games\Warframe\Downloaded\Cache.Windows";
+    public string WarframeLanguage { get; set; } = "pt";
+    public string WarframeGraphicsApi { get; set; } = "dx11";
+    public bool AutoCheckForUpdates { get; set; } = true;
+    public bool AutoRepair { get; set; } = false;
+    public bool AutoUpdate { get; set; } = false;
+    public bool DownloadCacheOnUpdate { get; set; } = true;
+    public bool DownloadToolsOnUpdate { get; set; } = true;
 
     // Maintenance
     public bool EnableCacheCleaner { get; set; } = true;
