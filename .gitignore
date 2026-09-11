@@ -6,3 +6,6 @@ obj/
 *.pdb
 *.cache
 scratch/
+publish/
+publish-single/
+*.zip

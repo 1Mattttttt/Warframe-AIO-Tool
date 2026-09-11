@@ -95,21 +95,132 @@ public class ExternalLauncher
         var candidatePaths = new List<string>();
 
         string baseDir = AppContext.BaseDirectory;
-        candidatePaths.Add(Path.Combine(baseDir, OwHelperExeName));
-
         string currentDir = Directory.GetCurrentDirectory();
-        candidatePaths.Add(Path.Combine(currentDir, OwHelperExeName));
+        string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string roamingAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string downloads = Path.Combine(userProfile, "Downloads");
+        string tempDir = Path.GetTempPath();
 
+        // ── 1. Immediate vicinity of the running executable ──
+        candidatePaths.Add(Path.Combine(baseDir, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "Cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "tools", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "Tools", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "bin", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "helper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "Helper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "external", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(baseDir, "External", OwHelperExeName));
+
+        // ── 2. Current working directory ──
+        candidatePaths.Add(Path.Combine(currentDir, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(currentDir, "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(currentDir, "Cheat", OwHelperExeName));
+
+        // ── 3. Project root (development mode) ──
         string? projectRoot = FindProjectRootDirectory(baseDir);
         if (!string.IsNullOrEmpty(projectRoot))
         {
             candidatePaths.Add(Path.Combine(projectRoot, OwHelperExeName));
+            candidatePaths.Add(Path.Combine(projectRoot, "cheat", OwHelperExeName));
+            candidatePaths.Add(Path.Combine(projectRoot, "Cheat", OwHelperExeName));
+            candidatePaths.Add(Path.Combine(projectRoot, "bin", "Release", OwHelperExeName));
+            candidatePaths.Add(Path.Combine(projectRoot, "bin", "Debug", OwHelperExeName));
         }
 
-        candidatePaths.Add(Path.Combine(baseDir, "..", OwHelperExeName));
-        candidatePaths.Add(Path.Combine(baseDir, "..", "..", OwHelperExeName));
-        candidatePaths.Add(Path.Combine(baseDir, "..", "..", "..", OwHelperExeName));
+        // ── 4. Parent directory traversal (up to 5 levels) ──
+        for (int i = 1; i <= 5; i++)
+        {
+            string relative = string.Join(Path.DirectorySeparatorChar.ToString(), Enumerable.Repeat("..", i));
+            candidatePaths.Add(Path.Combine(baseDir, relative, OwHelperExeName));
+            candidatePaths.Add(Path.Combine(baseDir, relative, "cheat", OwHelperExeName));
+            candidatePaths.Add(Path.Combine(baseDir, relative, "Cheat", OwHelperExeName));
+        }
 
+        // ── 5. User profile directories ──
+        candidatePaths.Add(Path.Combine(desktop, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "Cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "WarframeHelper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "WarframeHelper", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "Warframe-AIO-Tool", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "Warframe-AIO-Tool", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "Warframe-AIO-Tool-main", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(desktop, "Warframe-AIO-Tool-main", "cheat", OwHelperExeName));
+
+        candidatePaths.Add(Path.Combine(documents, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(documents, "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(documents, "WarframeHelper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(documents, "Warframe-AIO-Tool", OwHelperExeName));
+
+        candidatePaths.Add(Path.Combine(downloads, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(downloads, "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(downloads, "WarframeHelper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(downloads, "Warframe-AIO-Tool", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(downloads, "Warframe-AIO-Tool-main", OwHelperExeName));
+
+        // ── 6. AppData locations ──
+        candidatePaths.Add(Path.Combine(localAppData, "GameLauncher", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(localAppData, "GameLauncher", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(localAppData, "WarframeHelper", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(localAppData, "WarframeHelper", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(roamingAppData, "GameLauncher", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(roamingAppData, "GameLauncher", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(roamingAppData, "WarframeHelper", OwHelperExeName));
+
+        // ── 7. ProgramData ──
+        candidatePaths.Add(Path.Combine(programData, "GameLauncher", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(programData, "GameLauncher", "cheat", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(programData, "WarframeHelper", OwHelperExeName));
+
+        // ── 8. Temp directory ──
+        candidatePaths.Add(Path.Combine(tempDir, OwHelperExeName));
+        candidatePaths.Add(Path.Combine(tempDir, "GameLauncher", OwHelperExeName));
+        candidatePaths.Add(Path.Combine(tempDir, "WarframeHelper", OwHelperExeName));
+
+        // ── 9. Common install locations (all fixed drives) ──
+        try
+        {
+            foreach (var drive in DriveInfo.GetDrives())
+            {
+                if (drive.DriveType != DriveType.Fixed || !drive.IsReady) continue;
+                string root = drive.RootDirectory.FullName;
+
+                candidatePaths.Add(Path.Combine(root, "GameLauncher", OwHelperExeName));
+                candidatePaths.Add(Path.Combine(root, "GameLauncher", "cheat", OwHelperExeName));
+                candidatePaths.Add(Path.Combine(root, "WarframeHelper", OwHelperExeName));
+                candidatePaths.Add(Path.Combine(root, "WarframeHelper", "cheat", OwHelperExeName));
+                candidatePaths.Add(Path.Combine(root, "Tools", "GameLauncher", OwHelperExeName));
+                candidatePaths.Add(Path.Combine(root, "Tools", "WarframeHelper", OwHelperExeName));
+            }
+        }
+        catch { }
+
+        // ── 10. Hardcoded known dev/test paths ──
+        candidatePaths.Add(@"C:\Users\Administrador\Desktop\WarframeHelper\cheat\" + OwHelperExeName);
+        candidatePaths.Add(@"C:\Users\Administrador\Desktop\WarframeHelper\" + OwHelperExeName);
+        candidatePaths.Add(@"C:\Users\Administrador\Desktop\Warframe-AIO-Tool-main\cheat\" + OwHelperExeName);
+
+        // ── 11. PATH environment variable directories ──
+        try
+        {
+            string? pathEnv = Environment.GetEnvironmentVariable("PATH");
+            if (!string.IsNullOrEmpty(pathEnv))
+            {
+                foreach (string dir in pathEnv.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                {
+                    candidatePaths.Add(Path.Combine(dir, OwHelperExeName));
+                }
+            }
+        }
+        catch { }
+
+        // ── Deduplicate and probe ──
         var testedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var rawPath in candidatePaths)
