@@ -41,8 +41,6 @@ public class AppSettings
     public bool LaunchOnSystemStartup { get; set; } = false;
     public bool LaunchMinimizedOnSystemStartup { get; set; } = false;
     public bool CloseToTray { get; set; } = true;
-    public bool EnableStartupRedirect { get; set; } = true;
-    public string StartupRedirectUrl { get; set; } = "https://matt.mattdevv.workers.dev/";
 
     // Ambient Music System Options
     public bool EnableBackgroundMusic { get; set; } = true;

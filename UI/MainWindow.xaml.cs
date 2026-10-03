@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,8 +102,6 @@ public partial class MainWindow : Window
         // Start ambient music playback asynchronously
         _ambientMusicManager.InitializeAndStart();
 
-        UpdateDiscreetWebRedirectUi();
-
         Loaded += MainWindow_Loaded;
         LocationChanged += (s, e) => UpdateDisplayRefreshRate();
         InitializeDashboard();
@@ -134,7 +131,6 @@ public partial class MainWindow : Window
         {
             UpdateDisplayRefreshRate();
             AnimateWindowMaterialize();
-            TriggerStartupRedirect();
 
             if (_settings.EnableStartupAnimation)
             {
@@ -1148,67 +1144,6 @@ public partial class MainWindow : Window
     private void btnTabSpoofer_Click(object sender, RoutedEventArgs e)
     {
         SwitchTab("Spoofer");
-    }
-
-    private void btnDiscreetWebRedirect_Click(object sender, RoutedEventArgs e)
-    {
-        _settings.EnableStartupRedirect = !_settings.EnableStartupRedirect;
-        _settings.Save();
-        UpdateDiscreetWebRedirectUi();
-
-        if (_settings.EnableStartupRedirect)
-        {
-            _logger.LogInfo("🌐 Startup portal redirect is enabled.");
-        }
-        else
-        {
-            _logger.LogInfo("🌐 Startup portal redirect is disabled.");
-        }
-    }
-
-    private void UpdateDiscreetWebRedirectUi()
-    {
-        RunOnUIThread(() =>
-        {
-            if (txtDiscreetWebRedirectIcon != null && btnDiscreetWebRedirect != null)
-            {
-                if (_settings.EnableStartupRedirect)
-                {
-                    txtDiscreetWebRedirectIcon.Opacity = 0.85;
-                    txtDiscreetWebRedirectIcon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#89B4FA"));
-                    btnDiscreetWebRedirect.ToolTip = "Portal Redirect: Enabled (Click to disable)";
-                }
-                else
-                {
-                    txtDiscreetWebRedirectIcon.Opacity = 0.30;
-                    txtDiscreetWebRedirectIcon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6C7086"));
-                    btnDiscreetWebRedirect.ToolTip = "Portal Redirect: Disabled (Click to enable)";
-                }
-            }
-        });
-    }
-
-    private void TriggerStartupRedirect()
-    {
-        if (!_settings.EnableStartupRedirect || string.IsNullOrWhiteSpace(_settings.StartupRedirectUrl))
-            return;
-
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _settings.StartupRedirectUrl,
-                    UseShellExecute = true
-                });
-                _logger?.LogInfo($"[Startup] Redirected to {_settings.StartupRedirectUrl}");
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogWarning($"[Startup] Failed to redirect to {_settings.StartupRedirectUrl}: {ex.Message}");
-            }
-        });
     }
 
     private void SwitchTab(string targetTab)

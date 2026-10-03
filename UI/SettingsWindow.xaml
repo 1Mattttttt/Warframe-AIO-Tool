@@ -87,8 +87,7 @@
                         <CheckBox x:Name="chkStartMinimized" Content="Start minimized" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
                         <CheckBox x:Name="chkAutoLaunchWarframe" Content="Auto-launch Warframe" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
                         <CheckBox x:Name="chkEnableStartupAnimation" Content="Enable startup animation" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
-                        <CheckBox x:Name="chkEnableStartupJingle" Content="Enable startup completion jingle" Margin="0,0,0,8" Foreground="#CDD6F4" FontSize="13"/>
-                        <CheckBox x:Name="chkEnableStartupRedirect" Content="Redirect to community portal on launch" Margin="0,0,0,12" Foreground="#CDD6F4" FontSize="13"/>
+                        <CheckBox x:Name="chkEnableStartupJingle" Content="Enable startup completion jingle" Margin="0,0,0,12" Foreground="#CDD6F4" FontSize="13"/>
 
                         <!-- Startup Window Mode -->
                         <TextBlock Text="Startup Window Mode" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" Margin="0,4,0,4"/>

@@ -33,7 +33,6 @@ public partial class SettingsWindow : Window
         chkStartMinimized.IsChecked = _settings.StartMinimized;
         chkAutoLaunchWarframe.IsChecked = _settings.AutoLaunchWarframe;
         chkEnableStartupAnimation.IsChecked = _settings.EnableStartupAnimation;
-        chkEnableStartupRedirect.IsChecked = _settings.EnableStartupRedirect;
         // Audio & Music
         chkEnableBackgroundMusic.IsChecked = _settings.EnableBackgroundMusic;
         sliderSettingsMusicVolume.Value = _settings.BackgroundMusicVolume;
@@ -376,7 +375,6 @@ public partial class SettingsWindow : Window
         _settings.AutoLaunchWarframe = chkAutoLaunchWarframe.IsChecked == true;
         _settings.EnableStartupAnimation = chkEnableStartupAnimation.IsChecked == true;
         _settings.EnableStartupJingle = chkEnableStartupJingle.IsChecked == true;
-        _settings.EnableStartupRedirect = chkEnableStartupRedirect.IsChecked == true;
         _settings.EnableBackgroundMusic = chkEnableBackgroundMusic.IsChecked == true;
         _settings.BackgroundMusicVolume = sliderSettingsMusicVolume.Value;
 
