@@ -1,0 +1,138 @@
+<Window x:Class="GameLauncher.UI.TempSpooferConfirmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Confirm Temporary Spoofer" Height="520" Width="620"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" Foreground="#CDD6F4"
+        FontFamily="Segoe UI, Inter, Cascadia Code, sans-serif"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#1E1E2E"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border" Value="0.35"/>
+                                <Setter Property="Cursor" Value="No"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AmberConfirmButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#FAB387"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="DialogBorderContainer" Background="#18141F" BorderBrush="#FAB387" BorderThickness="2" CornerRadius="16" Margin="10" Opacity="0.0" RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+            <ScaleTransform x:Name="scaleDialog" ScaleX="0.85" ScaleY="0.85"/>
+        </Border.RenderTransform>
+        <Border.Effect>
+            <DropShadowEffect Color="#FAB387" BlurRadius="26" ShadowDepth="0" Opacity="0.45"/>
+        </Border.Effect>
+
+        <Grid Margin="22">
+            <Grid.RowDefinitions>
+                <!-- Titlebar -->
+                <RowDefinition Height="Auto"/>
+                <!-- Body -->
+                <RowDefinition Height="*"/>
+                <!-- Footer -->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- TITLEBAR -->
+            <Grid Grid.Row="0" Margin="0,0,0,14" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" Background="Transparent">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="⚠️" FontSize="22" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Warframe Temp Spoofer Warning" FontSize="20" FontWeight="Bold" Foreground="#FAB387" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button x:Name="btnCloseIcon" Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                        Foreground="#A6ADC8" Background="Transparent" BorderThickness="0" FontSize="14" FontWeight="Bold" 
+                        Cursor="Hand" Click="btnCancel_Click"/>
+            </Grid>
+
+            <!-- CONTENT BODY -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                <StackPanel Orientation="Vertical">
+                    
+                    <!-- CRITICAL SCOPE WARNING -->
+                    <Border Background="#2B1D19" BorderBrush="#FAB387" BorderThickness="1" CornerRadius="12" Padding="14" Margin="0,0,0,12">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <TextBlock Text="🚨" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Caution: Strictly Designed for Warframe Only" 
+                                           FontSize="13" FontWeight="Bold" Foreground="#FAB387" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="Be careful when using this temporary spoofer: it is engineered exclusively for Warframe and maps an unsigned kernel driver via vulnerable driver exploitation. DO NOT play other competitive games (such as Valorant, Fortnite, Apex Legends, or games with Vanguard, Easy Anti-Cheat, or BattlEye) while this temporary driver is loaded in memory. Playing other games with this driver resident in kernel space may trigger anti-cheat bans in those games." 
+                                       FontSize="12" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="17"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- REBOOT RESTORATION PROTOCOL -->
+                    <Border Background="#161A28" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="12" Padding="14" Margin="0,0,0,12">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <TextBlock Text="🔄" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="PC Reboot Restores Original Hardware Serials" 
+                                           FontSize="13" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="To completely flush the spoofed serials and restore your hardware identifiers back to their original factory values, you simply need to restart your PC. The spoofed state is non-persistent and exists only in volatile memory." 
+                                       FontSize="12" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="17"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ARCHITECTURAL ADVANTAGE -->
+                    <Border Background="#181524" BorderBrush="#CBA6F7" BorderThickness="1" CornerRadius="12" Padding="14">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <TextBlock Text="🛡️" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Why Temp Spoofer vs Native Permanent Spoofer?" 
+                                           FontSize="13" FontWeight="Bold" Foreground="#CBA6F7" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="This is useful for spoofing your serials ONLY for Warframe without risking other games, because using the native AIO Tool Spoofer alters your hardware serials PERMANENTLY (flashing motherboard NVRAM/SMBIOS). Permanent modifications cannot be undone and may harm your standing or cause mismatches in games with more aggressive anti-cheats." 
+                                       FontSize="12" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="17"/>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- FOOTER ACTION BUTTONS -->
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" x:Name="btnCancel" Content="Cancel" Style="{StaticResource ModernButton}" Click="btnCancel_Click" Width="110"/>
+                <Button Grid.Column="2" x:Name="btnConfirm" Content="Confirm (5)" Style="{StaticResource AmberConfirmButton}" Click="btnConfirm_Click" Width="140" IsEnabled="False"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

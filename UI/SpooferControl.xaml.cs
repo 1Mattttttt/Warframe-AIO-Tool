@@ -22,6 +22,7 @@ public partial class SpooferControl : UserControl
 {
     private SpooferManager? _spooferManager;
     private GuidSpoofManager? _guidSpoofManager;
+    private TempSpooferManager? _tempSpooferManager;
     private LoggerService? _logger;
     private bool _autoSpoofCompleted;
 
@@ -40,6 +41,7 @@ public partial class SpooferControl : UserControl
         _spooferManager = spooferManager ?? throw new ArgumentNullException(nameof(spooferManager));
         _guidSpoofManager = guidSpoofManager ?? throw new ArgumentNullException(nameof(guidSpoofManager));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _tempSpooferManager = new TempSpooferManager(_logger);
 
         UpdateGuidDisplay();
         AddLogEntry("✓ Spoofer module initialized successfully.", "#A6E3A1");
@@ -309,6 +311,102 @@ public partial class SpooferControl : UserControl
         dialog.ShowDialog();
     }
 
+    private async void btnMapTempSpoofer_Click(object sender, RoutedEventArgs e)
+    {
+        if (_tempSpooferManager == null)
+        {
+            if (_logger != null)
+            {
+                _tempSpooferManager = new TempSpooferManager(_logger);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        Window? ownerWindow = Window.GetWindow(this);
+        var confirmDialog = new TempSpooferConfirmDialog
+        {
+            Owner = ownerWindow
+        };
+
+        if (confirmDialog.ShowDialog() != true)
+        {
+            AddLogEntry("⚠ Temp Spoofer execution cancelled by user.", "#FAB387");
+            return;
+        }
+
+        SetButtonsEnabled(false);
+        AddLogEntry("⏳ Initiating Warframe Temporary Kernel Driver mapping (BYOVD)...", "#FAB387");
+        UpdateStatusText("⏳ Mapping kernel spoofer driver...");
+
+        bool success = await _tempSpooferManager.MapTempDriverAsync(UpdateStatusText);
+
+        if (success)
+        {
+            txtTempDriverStatus.Text = "Resident in RAM (Active)";
+            txtTempDriverStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A6E3A1"));
+            txtMapTempSpooferBtn.Text = "Re-map Temp Spoofer";
+            AddLogEntry("✔ Warframe Temp Spoofer driver successfully mapped into kernel RAM.", "#A6E3A1");
+            AddLogEntry("ℹ Hardware serials altered in RAM. Resets completely upon PC reboot.", "#89B4FA");
+            UpdateStatusText("✔ Temp Spoofer Active (RAM Resident)");
+        }
+        else
+        {
+            AddLogEntry("❌ Temp Spoofer driver mapping failed. Ensure Administrator rights and check logs.", "#F38BA8");
+            UpdateStatusText("❌ Driver mapping failed");
+        }
+
+        SetButtonsEnabled(true);
+    }
+
+    private async void btnVerifySerials_Click(object sender, RoutedEventArgs e)
+    {
+        if (_tempSpooferManager == null)
+        {
+            if (_logger != null)
+            {
+                _tempSpooferManager = new TempSpooferManager(_logger);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        SetButtonsEnabled(false);
+        AddLogEntry("🔍 Querying current hardware identifiers (WMIC / GetMac)...", "#89B4FA");
+        UpdateStatusText("🔍 Querying hardware serials...");
+
+        var report = await _tempSpooferManager.VerifyHardwareSerialsAsync(UpdateStatusText);
+
+        AddLogEntry("════════ HARDWARE IDENTIFIERS REPORT ════════", "#CBA6F7");
+        AddLogEntry($"💾 Disks: {report.DiskDrives}", "#CDD6F4");
+        AddLogEntry($"⚡ CPU: {report.CpuSerial}", "#CDD6F4");
+        AddLogEntry($"📟 BIOS: {report.BiosSerial}", "#CDD6F4");
+        AddLogEntry($"🖥 Motherboard: {report.BaseboardSerial}", "#CDD6F4");
+        AddLogEntry($"🔑 smBIOS UUID: {report.SmbiosUuid}", "#CDD6F4");
+        AddLogEntry($"🌐 Physical MAC:\n{report.MacAddresses}", "#CDD6F4");
+        AddLogEntry("═════════════════════════════════════════════", "#CBA6F7");
+
+        UpdateStatusText("✔ Hardware serials check complete.");
+        SetButtonsEnabled(true);
+    }
+
+    private void btnTempSpooferLearnMore_Click(object sender, RoutedEventArgs e)
+    {
+        Window? ownerWindow = Window.GetWindow(this);
+
+        var dialog = new TempSpooferInfoDialog
+        {
+            Owner = ownerWindow
+        };
+
+        AddLogEntry("ℹ Opened Temp vs Perm Spoofer architecture guide.", "#89B4FA");
+        dialog.ShowDialog();
+    }
+
     private void SetButtonsEnabled(bool isEnabled)
     {
         btnAutoSpoof.IsEnabled = !_autoSpoofCompleted && isEnabled;
@@ -318,6 +416,10 @@ public partial class SpooferControl : UserControl
         btnRunDynamicIpChanger.IsEnabled = isEnabled;
         btnCleanWarframeFiles.IsEnabled = isEnabled;
         btnSpooferTutorial.IsEnabled = isEnabled;
+
+        btnMapTempSpoofer.IsEnabled = isEnabled;
+        btnVerifySerials.IsEnabled = isEnabled;
+        btnTempSpooferLearnMore.IsEnabled = isEnabled;
     }
 
     private void UpdateStatusText(string statusMessage)
