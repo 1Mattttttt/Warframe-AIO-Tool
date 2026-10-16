@@ -112,11 +112,17 @@ public partial class MainWindow : Window
         try
         {
             int currentHz = DisplayMonitorHelper.GetWindowRefreshRate(this);
-            if (currentHz > 0 && currentHz != _activeRefreshRateHz)
+            if (currentHz > 0)
             {
-                _activeRefreshRateHz = currentHz;
-                _targetFrameIntervalMs = 1000.0 / _activeRefreshRateHz;
-                _logger?.LogInfo($"[Display Engine] Active monitor refresh rate detected: {_activeRefreshRateHz}Hz (Target frame interval: {_targetFrameIntervalMs:F2}ms)");
+                // Cap active refresh rate to 60 FPS maximum for the WPF background engine.
+                // Running at 144Hz/240Hz on a transparent WPF window overwhelms DWM and causes frame starvation when 3D games run.
+                int cappedHz = Math.Min(60, currentHz);
+                if (cappedHz != _activeRefreshRateHz)
+                {
+                    _activeRefreshRateHz = cappedHz;
+                    _targetFrameIntervalMs = 1000.0 / _activeRefreshRateHz;
+                    _logger?.LogInfo($"[Display Engine] Monitor refresh rate {currentHz}Hz calibrated: background engine running at {_activeRefreshRateHz} FPS (Interval: {_targetFrameIntervalMs:F2}ms)");
+                }
             }
         }
         catch
@@ -1626,15 +1632,23 @@ public partial class MainWindow : Window
         if (Visibility != Visibility.Visible || WindowState == WindowState.Minimized || !IsLoaded || ActualWidth <= 0 || ActualHeight <= 0)
             return;
 
+        // When the user is inside Warframe or another full-screen game, IsActive is false.
+        // Throttle rendering to 10 FPS (100ms interval) to avoid competing with Warframe's DirectX pipeline,
+        // preventing DWM frame starvation, GPU lag, and UI freezes during matches.
+        double effectiveInterval = IsActive ? _targetFrameIntervalMs : 100.0;
+
         long currentTicks = DateTime.UtcNow.Ticks;
         double elapsedMs = (currentTicks - _lastRenderTicks) / (double)TimeSpan.TicksPerMillisecond;
-        if (elapsedMs < (_targetFrameIntervalMs - 0.5)) return; // Dynamic refresh rate frame throttling (60, 100, 144, 165, 240+ Hz)
+        if (elapsedMs < (effectiveInterval - 0.5)) return;
         _lastRenderTicks = currentTicks;
 
         double dt = Math.Min(0.05, Math.Max(0.003, elapsedMs / 1000.0));
 
-        // Render 60 FPS Cinematic Background Engine Frame (3D Particles, Fog, Energy Core & Parallax)
+        // Render Cinematic Background Engine Frame (3D Saturn, Rings, Meteors, Fog & Parallax)
         cinematicBgEngine.UpdateEngineFrame(_targetMousePos.X, _targetMousePos.Y, dt);
+
+        // When the window is in the background, skip updating dynamic mouse lights and proximity drop shadows
+        if (!IsActive) return;
 
         // 1. Multi-Layer Position Interpolation (Fast Core, Medium Ambient, Slow Cinematic Trail)
         _coreGlowPos.X += (_targetMousePos.X - _coreGlowPos.X) * 0.18;
@@ -1675,15 +1689,18 @@ public partial class MainWindow : Window
             BackgroundGlowBrushAmbient.RadiusY = 0.85;
         }
 
-        // 3. Proximity Lighting Interaction with Dashboard Cards
-        Point mousePx = new Point(_coreGlowPos.X * ActualWidth, _coreGlowPos.Y * ActualHeight);
-        UpdateCardProximityGlow(cardEpic, mousePx);
-        UpdateCardProximityGlow(cardSteam, mousePx);
-        UpdateCardProximityGlow(cardStandalone, mousePx);
-        UpdateCardProximityGlow(animCardStatus, mousePx);
-        UpdateCardProximityGlow(animCardCounter, mousePx);
-        UpdateCardProximityGlow(animCardSdk, mousePx);
-        UpdateCardProximityGlow(animLogConsole, mousePx);
+        // 3. Proximity Lighting Interaction with Dashboard Cards (only when mouse is moving)
+        if (idleSeconds < 2.0)
+        {
+            Point mousePx = new Point(_coreGlowPos.X * ActualWidth, _coreGlowPos.Y * ActualHeight);
+            UpdateCardProximityGlow(cardEpic, mousePx);
+            UpdateCardProximityGlow(cardSteam, mousePx);
+            UpdateCardProximityGlow(cardStandalone, mousePx);
+            UpdateCardProximityGlow(animCardStatus, mousePx);
+            UpdateCardProximityGlow(animCardCounter, mousePx);
+            UpdateCardProximityGlow(animCardSdk, mousePx);
+            UpdateCardProximityGlow(animLogConsole, mousePx);
+        }
     }
 
     private void UpdateCardProximityGlow(FrameworkElement? element, Point mousePx)
@@ -1703,9 +1720,13 @@ public partial class MainWindow : Window
             if (distance < maxDistance)
             {
                 double proximity = 1.0 - (distance / maxDistance);
+                double targetOpacity = 0.25 + (proximity * 0.35);
                 if (element.Effect is DropShadowEffect shadow && !shadow.IsFrozen)
                 {
-                    shadow.Opacity = 0.25 + (proximity * 0.35);
+                    if (Math.Abs(shadow.Opacity - targetOpacity) > 0.03)
+                    {
+                        shadow.Opacity = targetOpacity;
+                    }
                 }
             }
         }

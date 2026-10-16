@@ -80,9 +80,9 @@
             <StackPanel Grid.Row="1" Orientation="Vertical">
                 <Border Background="#28151A" BorderBrush="#F38BA8" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,16">
                     <StackPanel>
-                        <TextBlock Text="This process will automatically execute all Spoofer steps." 
+                        <TextBlock Text="This will run all spoofing steps in order." 
                                    FontSize="14" FontWeight="Bold" Foreground="#F38BA8" Margin="0,0,0,6"/>
-                        <TextBlock Text="Make sure you understand what each step does before continuing." 
+                        <TextBlock Text="Make sure Warframe is closed before starting." 
                                    FontSize="13" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="18"/>
                     </StackPanel>
                 </Border>
@@ -90,12 +90,17 @@
                 <!-- SEQUENTIAL WORKFLOW LIST -->
                 <Border Background="#120D10" BorderBrush="#3B2028" BorderThickness="1" CornerRadius="12" Padding="14">
                     <StackPanel>
-                        <TextBlock Text="Automated Execution Sequence:" FontSize="12" FontWeight="Bold" Foreground="#FAB387" Margin="0,0,0,8"/>
-                        <TextBlock Text="1. Run Spoofer (PSWOA hardware ID modification)" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
-                        <TextBlock Text="2. NetFixer (MAC address randomizer)" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
-                        <TextBlock Text="3. Standby Delay (10 seconds pause)" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
-                        <TextBlock Text="4. Clean Warframe Files (Temporary cache cleanup)" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
-                        <TextBlock Text="5. Network Settings (Flush DNS &amp; Winsock reset - auto reboot)" FontSize="12" Foreground="#A6ADC8"/>
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="Steps:" FontSize="12" FontWeight="Bold" Foreground="#FAB387" VerticalAlignment="Center"/>
+                            <Border Background="#16281D" BorderBrush="#A6E3A1" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="AUTO" FontSize="10" FontWeight="Bold" Foreground="#A6E3A1"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Text="1. Randomize MachineGUID &amp; Hostname" FontSize="12" Foreground="#A6E3A1" Margin="0,0,0,4"/>
+                        <TextBlock Text="2. NetFixer (Reset network adapters &amp; MAC)" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                        <TextBlock Text="3. Wait 10 seconds for adapters to reconnect" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                        <TextBlock Text="4. Clean Warframe cache, account hashes &amp; H.Misc files" FontSize="12" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                        <TextBlock Text="5. Flush DNS and reset network stack" FontSize="12" Foreground="#A6ADC8"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

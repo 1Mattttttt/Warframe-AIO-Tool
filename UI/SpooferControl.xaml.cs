@@ -22,7 +22,6 @@ public partial class SpooferControl : UserControl
 {
     private SpooferManager? _spooferManager;
     private GuidSpoofManager? _guidSpoofManager;
-    private TempSpooferManager? _tempSpooferManager;
     private LoggerService? _logger;
     private bool _autoSpoofCompleted;
 
@@ -41,17 +40,27 @@ public partial class SpooferControl : UserControl
         _spooferManager = spooferManager ?? throw new ArgumentNullException(nameof(spooferManager));
         _guidSpoofManager = guidSpoofManager ?? throw new ArgumentNullException(nameof(guidSpoofManager));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _tempSpooferManager = new TempSpooferManager(_logger);
 
         UpdateGuidDisplay();
-        AddLogEntry("✓ Spoofer module initialized successfully.", "#A6E3A1");
+        AddLogEntry("✓ Spoofer ready.", "#A6E3A1");
     }
 
     private void UpdateGuidDisplay()
     {
-        if (_guidSpoofManager != null && txtCurrentGuidDisplay != null)
+        if (_guidSpoofManager != null)
         {
-            txtCurrentGuidDisplay.Text = _guidSpoofManager.CurrentGuid;
+            if (txtCurrentGuidDisplay != null)
+            {
+                txtCurrentGuidDisplay.Text = _guidSpoofManager.CurrentGuid;
+            }
+            if (txtCurrentComputerName != null)
+            {
+                txtCurrentComputerName.Text = _guidSpoofManager.CurrentComputerName;
+            }
+            if (txtCurrentUserName != null)
+            {
+                txtCurrentUserName.Text = _guidSpoofManager.CurrentUserName;
+            }
         }
     }
 
@@ -61,8 +70,29 @@ public partial class SpooferControl : UserControl
 
         string newGuid = _guidSpoofManager.GenerateNewGuid();
         UpdateGuidDisplay();
-        AddLogEntry($"🎲 New System MachineGUID Spoofed:\n{newGuid}", "#89B4FA");
-        UpdateStatusText("✔ System MachineGUID Spoofed");
+        AddLogEntry($"🎲 New MachineGUID: {newGuid}", "#89B4FA");
+        UpdateStatusText("✔ MachineGUID updated");
+    }
+
+    private void btnRandomizeComputerName_Click(object sender, RoutedEventArgs e)
+    {
+        if (_guidSpoofManager == null) return;
+
+        string oldName = _guidSpoofManager.CurrentComputerName;
+        string newName = _guidSpoofManager.GenerateRandomComputerName();
+
+        bool success = _guidSpoofManager.SpoofComputerName(newName);
+        UpdateGuidDisplay();
+
+        if (success)
+        {
+            AddLogEntry($"🎲 Hostname changed: '{oldName}' -> '{newName}' (takes effect on reboot)", "#89B4FA");
+            UpdateStatusText("✔ Hostname changed");
+        }
+        else
+        {
+            AddLogEntry($"⚠ Failed to change hostname. Run as Administrator.", "#FAB387");
+        }
     }
 
     private void btnCopyGuid_Click(object sender, RoutedEventArgs e)
@@ -72,11 +102,11 @@ public partial class SpooferControl : UserControl
             try
             {
                 Clipboard.SetText(_guidSpoofManager.CurrentGuid);
-                AddLogEntry("📋 GUID copied to clipboard.", "#A6E3A1");
+                AddLogEntry("📋 Copied to clipboard.", "#A6E3A1");
             }
             catch (Exception ex)
             {
-                AddLogEntry($"⚠ Could not copy GUID to clipboard: {ex.Message}", "#FAB387");
+                AddLogEntry($"⚠ Could not copy: {ex.Message}", "#FAB387");
             }
         }
     }
@@ -93,15 +123,15 @@ public partial class SpooferControl : UserControl
 
         if (confirmDialog.ShowDialog() != true)
         {
-            AddLogEntry("⚠ Auto Spoof execution cancelled by user.", "#FAB387");
+            AddLogEntry("⚠ Cancelled.", "#FAB387");
             return;
         }
 
         // Lock button permanently until app restart
         _autoSpoofCompleted = true;
         btnAutoSpoof.IsEnabled = false;
-        txtAutoSpoofBtnTitle.Text = "Auto Spoof Completed";
-        txtAutoSpoofBtnSub.Text = "executed";
+        txtAutoSpoofBtnTitle.Text = "Done";
+        txtAutoSpoofBtnSub.Text = "finished";
         txtAutoSpoofBtnTitle.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CDD6F4"));
         txtAutoSpoofBtnSub.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A6ADC8"));
 
@@ -109,68 +139,69 @@ public partial class SpooferControl : UserControl
         ApplyRedThemeMode();
 
         SetButtonsEnabled(false);
-        AddLogEntry("🚨 Starting Auto Spoof sequence...", "#F38BA8");
-        UpdateStatusText("🚨 Auto Spoof sequence active...");
+        AddLogEntry("🚨 Starting Auto Spoof...", "#F38BA8");
+        UpdateStatusText("🚨 Running Auto Spoof...");
 
-        // Stage 1: System GUID Spoofing
-        AddLogEntry("[1/6] Generating and Spoofing new System MachineGUID...", "#F38BA8");
+        // Stage 1: System GUID & Hostname Spoofing
+        AddLogEntry("[1/5] Spoofing MachineGUID & Hostname...", "#F38BA8");
         if (_guidSpoofManager != null)
         {
             string newGuid = _guidSpoofManager.GenerateNewGuid();
+            string newHost = _guidSpoofManager.GenerateRandomComputerName();
+            bool hostChanged = _guidSpoofManager.SpoofComputerName(newHost);
             UpdateGuidDisplay();
-            AddLogEntry($"✓ [1/6] MachineGUID Spoofed: {newGuid}", "#A6E3A1");
+            AddLogEntry($"✓ [1/5] New MachineGUID: {newGuid}", "#A6E3A1");
+            if (hostChanged)
+            {
+                AddLogEntry($"✓ [1/5] New Hostname: {newHost}", "#A6E3A1");
+            }
         }
         else
         {
-            AddLogEntry("⚠ [1/6] GUID Spoof Manager unavailable.", "#FAB387");
+            AddLogEntry("⚠ [1/5] GUID Spoof Manager unavailable.", "#FAB387");
         }
 
-        // Stage 2: Run Spoofer (PSWOA)
-        AddLogEntry("[2/6] Executing Run Spoofer (PSWOA)...", "#F38BA8");
-        bool step2 = await _spooferManager.RunMainSpooferAsync(UpdateStatusText);
-        AddLogEntry(step2 ? "✓ [2/6] Spoofer completed successfully." : "⚠ [2/6] Spoofer finished with warnings.", step2 ? "#A6E3A1" : "#FAB387");
+        // Stage 2: NetFixer.bat
+        AddLogEntry("[2/5] Running NetFixer (MAC address reset)...", "#F38BA8");
+        bool step2 = await _spooferManager.RunNetFixerAsync(UpdateStatusText);
+        AddLogEntry(step2 ? "✓ [2/5] NetFixer done." : "⚠ [2/5] NetFixer finished with warnings.", step2 ? "#A6E3A1" : "#FAB387");
 
-        // Stage 3: NetFixer.bat
-        AddLogEntry("[3/6] Executing NetFixer.bat...", "#F38BA8");
-        bool step3 = await _spooferManager.RunNetFixerAsync(UpdateStatusText);
-        AddLogEntry(step3 ? "✓ [3/6] NetFixer completed." : "⚠ [3/6] NetFixer finished with warnings.", step3 ? "#A6E3A1" : "#FAB387");
-
-        // Stage 4: Standby Delay 10 seconds
-        AddLogEntry("⏳ [4/6] Waiting 10 seconds before deep file cleanup...", "#89B4FA");
-        UpdateStatusText("⏳ Waiting 10s before deep file cleanup...");
+        // Stage 3: Standby Delay 10 seconds
+        AddLogEntry("⏳ [3/5] Waiting 10s for network to settle...", "#89B4FA");
+        UpdateStatusText("⏳ Waiting 10s...");
         for (int i = 10; i > 0; i--)
         {
             await Task.Delay(1000);
-            UpdateStatusText($"⏳ Waiting {i}s before deep file cleanup...");
+            UpdateStatusText($"⏳ Waiting {i}s...");
         }
-        AddLogEntry("✓ [4/6] Standby period finished.", "#A6E3A1");
+        AddLogEntry("✓ [3/5] Ready.", "#A6E3A1");
 
-        // Stage 5: Comprehensive Clean Warframe Files & Registry
-        AddLogEntry("🧹 [5/6] Executing comprehensive Warframe file & registry deep cleanup...", "#E78284");
-        UpdateStatusText("🧹 Deep cleaning Warframe files & registry...");
+        // Stage 4: Clean Warframe Files & Registry
+        AddLogEntry("🧹 [4/5] Cleaning Warframe files, account hashes & H.Misc cache...", "#E78284");
+        UpdateStatusText("🧹 Cleaning files & cache...");
         await Task.Run(() =>
         {
             try
             {
                 if (_logger != null)
                 {
-                    WarframeCleaner.CleanWarframeFiles(_logger);
+                    WarframeCleaner.CleanWarframeFiles(_logger, AppSettings.Load());
                 }
             }
             catch (Exception ex)
             {
-                _logger?.LogError($"Auto Spoof deep cleanup exception: {ex.Message}");
+                _logger?.LogError($"Auto Spoof cleanup exception: {ex.Message}");
             }
         });
-        AddLogEntry("✓ [5/6] Warframe files & registry purged.", "#A6E3A1");
+        AddLogEntry("✓ [4/5] Files, cache and registry keys cleaned.", "#A6E3A1");
 
-        // Stage 6: Network Settings.bat
-        AddLogEntry("[6/6] Executing Network Settings.bat...", "#F38BA8");
-        bool step6 = await _spooferManager.RunNetworkSettingsAsync(UpdateStatusText);
-        AddLogEntry(step6 ? "✓ [6/6] Network Settings completed." : "⚠ [6/6] Network Settings finished with warnings.", step6 ? "#A6E3A1" : "#FAB387");
+        // Stage 5: Network Settings.bat
+        AddLogEntry("[5/5] Running Network Settings (DNS & IP reset)...", "#F38BA8");
+        bool step5 = await _spooferManager.RunNetworkSettingsAsync(UpdateStatusText);
+        AddLogEntry(step5 ? "✓ [5/5] Network Settings done." : "⚠ [5/5] Network Settings finished with warnings.", step5 ? "#A6E3A1" : "#FAB387");
 
-        AddLogEntry("✔ Auto Spoof sequence execution completed.", "#A6E3A1");
-        UpdateStatusText("✔ Auto Spoof completed.");
+        AddLogEntry("✔ Auto Spoof finished successfully.", "#A6E3A1");
+        UpdateStatusText("✔ Auto Spoof done.");
 
         SetButtonsEnabled(true);
     }
@@ -188,7 +219,7 @@ public partial class SpooferControl : UserControl
             badgeSpooferModule.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3B1822"));
             badgeSpooferModule.BorderBrush = redBrush;
             txtSpooferBadgeText.Foreground = redBrush;
-            txtSpooferBadgeText.Text = "RED WARNING MODE";
+            txtSpooferBadgeText.Text = "SPOOFED";
 
             cardAutoSpoofBanner.BorderBrush = redBrush;
             cardModuleControls.BorderBrush = redBrush;
@@ -197,24 +228,28 @@ public partial class SpooferControl : UserControl
         });
     }
 
-    private async void btnRunMainSpoofer_Click(object sender, RoutedEventArgs e)
+    private async void btnCleanWarframeFiles_Click(object sender, RoutedEventArgs e)
     {
-        if (_spooferManager == null) return;
+        if (_logger == null) return;
 
         SetButtonsEnabled(false);
-        AddLogEntry("⏳ Initiating Run Spoofer (PSWOA - run as admin to spoof.exe)...", "#89B4FA");
+        AddLogEntry("⏳ Cleaning Warframe files, cache and registry...", "#E78284");
+        UpdateStatusText("⏳ Cleaning files & cache...");
 
-        bool success = await _spooferManager.RunMainSpooferAsync(UpdateStatusText);
-
-        if (success)
+        await Task.Run(() =>
         {
-            AddLogEntry("✓ Spoofer started successfully.", "#A6E3A1");
-        }
-        else
-        {
-            AddLogEntry("⚠ Spoofer execution completed with warnings or was cancelled.", "#FAB387");
-        }
+            try
+            {
+                WarframeCleaner.CleanWarframeFiles(_logger, AppSettings.Load());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Warframe cleanup exception: {ex.Message}");
+            }
+        });
 
+        AddLogEntry("✓ Warframe files, cache and registry cleaned.", "#A6E3A1");
+        UpdateStatusText("✔ Cleaned.");
         SetButtonsEnabled(true);
     }
 
@@ -223,17 +258,17 @@ public partial class SpooferControl : UserControl
         if (_spooferManager == null) return;
 
         SetButtonsEnabled(false);
-        AddLogEntry("⏳ Initiating NetFixer.bat...", "#89B4FA");
+        AddLogEntry("⏳ Running NetFixer...", "#89B4FA");
 
         bool success = await _spooferManager.RunNetFixerAsync(UpdateStatusText);
 
         if (success)
         {
-            AddLogEntry("✓ NetFixer completed successfully.", "#A6E3A1");
+            AddLogEntry("✓ NetFixer done.", "#A6E3A1");
         }
         else
         {
-            AddLogEntry("⚠ NetFixer completed with warnings or was cancelled.", "#FAB387");
+            AddLogEntry("⚠ NetFixer finished with warnings or was cancelled.", "#FAB387");
         }
 
         SetButtonsEnabled(true);
@@ -244,17 +279,17 @@ public partial class SpooferControl : UserControl
         if (_spooferManager == null) return;
 
         SetButtonsEnabled(false);
-        AddLogEntry("⏳ Initiating Network Settings.bat...", "#89B4FA");
+        AddLogEntry("⏳ Running Network Settings...", "#89B4FA");
 
         bool success = await _spooferManager.RunNetworkSettingsAsync(UpdateStatusText);
 
         if (success)
         {
-            AddLogEntry("✓ Network Settings completed.", "#A6E3A1");
+            AddLogEntry("✓ Network Settings done.", "#A6E3A1");
         }
         else
         {
-            AddLogEntry("⚠ Network Settings completed with warnings or was cancelled.", "#FAB387");
+            AddLogEntry("⚠ Network Settings finished with warnings or was cancelled.", "#FAB387");
         }
 
         SetButtonsEnabled(true);
@@ -269,33 +304,8 @@ public partial class SpooferControl : UserControl
             Owner = ownerWindow
         };
 
-        AddLogEntry("ℹ Opened Dynamic IP Changer tutorial popup.", "#89B4FA");
+        AddLogEntry("ℹ Opened Dynamic IP instructions.", "#89B4FA");
         dialog.ShowDialog();
-    }
-
-    private async void btnCleanWarframeFiles_Click(object sender, RoutedEventArgs e)
-    {
-        if (_logger == null) return;
-
-        SetButtonsEnabled(false);
-        AddLogEntry("⏳ Initiating Warframe temporary cache file cleanup...", "#E78284");
-        UpdateStatusText("⏳ Cleaning Warframe temporary files...");
-
-        await Task.Run(() =>
-        {
-            try
-            {
-                WarframeCleaner.CleanWarframeFiles(_logger);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Warframe cache cleanup exception: {ex.Message}");
-            }
-        });
-
-        AddLogEntry("✓ Warframe temporary cache cleanup completed.", "#A6E3A1");
-        UpdateStatusText("✔ Warframe cache cleaned.");
-        SetButtonsEnabled(true);
     }
 
     private void btnSpooferTutorial_Click(object sender, RoutedEventArgs e)
@@ -307,119 +317,20 @@ public partial class SpooferControl : UserControl
             Owner = ownerWindow
         };
 
-        AddLogEntry("ℹ Opened Spoofer System Interactive Tutorial.", "#F5C2E7");
-        dialog.ShowDialog();
-    }
-
-    private async void btnMapTempSpoofer_Click(object sender, RoutedEventArgs e)
-    {
-        if (_tempSpooferManager == null)
-        {
-            if (_logger != null)
-            {
-                _tempSpooferManager = new TempSpooferManager(_logger);
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        Window? ownerWindow = Window.GetWindow(this);
-        var confirmDialog = new TempSpooferConfirmDialog
-        {
-            Owner = ownerWindow
-        };
-
-        if (confirmDialog.ShowDialog() != true)
-        {
-            AddLogEntry("⚠ Temp Spoofer execution cancelled by user.", "#FAB387");
-            return;
-        }
-
-        SetButtonsEnabled(false);
-        AddLogEntry("⏳ Initiating Warframe Temporary Kernel Driver mapping (BYOVD)...", "#FAB387");
-        UpdateStatusText("⏳ Mapping kernel spoofer driver...");
-
-        bool success = await _tempSpooferManager.MapTempDriverAsync(UpdateStatusText);
-
-        if (success)
-        {
-            txtTempDriverStatus.Text = "Resident in RAM (Active)";
-            txtTempDriverStatus.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A6E3A1"));
-            txtMapTempSpooferBtn.Text = "Re-map Temp Spoofer";
-            AddLogEntry("✔ Warframe Temp Spoofer driver successfully mapped into kernel RAM.", "#A6E3A1");
-            AddLogEntry("ℹ Hardware serials altered in RAM. Resets completely upon PC reboot.", "#89B4FA");
-            UpdateStatusText("✔ Temp Spoofer Active (RAM Resident)");
-        }
-        else
-        {
-            AddLogEntry("❌ Temp Spoofer driver mapping failed. Ensure Administrator rights and check logs.", "#F38BA8");
-            UpdateStatusText("❌ Driver mapping failed");
-        }
-
-        SetButtonsEnabled(true);
-    }
-
-    private async void btnVerifySerials_Click(object sender, RoutedEventArgs e)
-    {
-        if (_tempSpooferManager == null)
-        {
-            if (_logger != null)
-            {
-                _tempSpooferManager = new TempSpooferManager(_logger);
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        SetButtonsEnabled(false);
-        AddLogEntry("🔍 Querying current hardware identifiers (WMIC / GetMac)...", "#89B4FA");
-        UpdateStatusText("🔍 Querying hardware serials...");
-
-        var report = await _tempSpooferManager.VerifyHardwareSerialsAsync(UpdateStatusText);
-
-        AddLogEntry("════════ HARDWARE IDENTIFIERS REPORT ════════", "#CBA6F7");
-        AddLogEntry($"💾 Disks: {report.DiskDrives}", "#CDD6F4");
-        AddLogEntry($"⚡ CPU: {report.CpuSerial}", "#CDD6F4");
-        AddLogEntry($"📟 BIOS: {report.BiosSerial}", "#CDD6F4");
-        AddLogEntry($"🖥 Motherboard: {report.BaseboardSerial}", "#CDD6F4");
-        AddLogEntry($"🔑 smBIOS UUID: {report.SmbiosUuid}", "#CDD6F4");
-        AddLogEntry($"🌐 Physical MAC:\n{report.MacAddresses}", "#CDD6F4");
-        AddLogEntry("═════════════════════════════════════════════", "#CBA6F7");
-
-        UpdateStatusText("✔ Hardware serials check complete.");
-        SetButtonsEnabled(true);
-    }
-
-    private void btnTempSpooferLearnMore_Click(object sender, RoutedEventArgs e)
-    {
-        Window? ownerWindow = Window.GetWindow(this);
-
-        var dialog = new TempSpooferInfoDialog
-        {
-            Owner = ownerWindow
-        };
-
-        AddLogEntry("ℹ Opened Temp vs Perm Spoofer architecture guide.", "#89B4FA");
+        AddLogEntry("ℹ Opened Tutorial.", "#F5C2E7");
         dialog.ShowDialog();
     }
 
     private void SetButtonsEnabled(bool isEnabled)
     {
         btnAutoSpoof.IsEnabled = !_autoSpoofCompleted && isEnabled;
-        btnRunMainSpoofer.IsEnabled = isEnabled;
+        btnSpoofGuid.IsEnabled = isEnabled;
+        btnRandomizeComputerName.IsEnabled = isEnabled;
+        btnCleanWarframeFiles.IsEnabled = isEnabled;
         btnRunNetFixer.IsEnabled = isEnabled;
         btnRunNetworkSettings.IsEnabled = isEnabled;
         btnRunDynamicIpChanger.IsEnabled = isEnabled;
-        btnCleanWarframeFiles.IsEnabled = isEnabled;
         btnSpooferTutorial.IsEnabled = isEnabled;
-
-        btnMapTempSpoofer.IsEnabled = isEnabled;
-        btnVerifySerials.IsEnabled = isEnabled;
-        btnTempSpooferLearnMore.IsEnabled = isEnabled;
     }
 
     private void UpdateStatusText(string statusMessage)

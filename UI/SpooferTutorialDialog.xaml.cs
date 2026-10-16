@@ -89,22 +89,6 @@ public partial class SpooferTutorialDialog : Window
         }
     }
 
-    private void btnDownloadWarp_Click(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "https://1.1.1.1/",
-                UseShellExecute = true
-            });
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Could not open browser: {ex.Message}", "URL Redirect Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-    }
-
     private void UpdateStepView()
     {
         txtStepBadge.Text = $"Step {_currentStep} of {TotalSteps}";

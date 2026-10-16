@@ -81,14 +81,12 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                 <TextBlock Text="💡" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="How IP Refreshing Works" FontSize="14" FontWeight="Bold" Foreground="#89B4FA"/>
+                                <TextBlock Text="Changing your Public IP" FontSize="14" FontWeight="Bold" Foreground="#89B4FA"/>
                             </StackPanel>
-                            <TextBlock Text="Network Settings attempts to reset your network configuration and request a new IP from your internet provider." 
+                            <TextBlock Text="Network Settings resets your local network stack, but your external IP is assigned by your internet provider." 
                                        FontSize="13" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,6" LineHeight="18"/>
-                            <TextBlock Text="Some internet providers may not assign a new IP immediately." 
+                            <TextBlock Text="If your public IP didn't change automatically, you can restart your modem/router:" 
                                        FontSize="13" Foreground="#FAB387" TextWrapping="Wrap" Margin="0,0,0,6" FontWeight="SemiBold"/>
-                            <TextBlock Text="If the IP does not change, try the following manual method:" 
-                                       FontSize="13" Foreground="#CDD6F4" TextWrapping="Wrap" FontWeight="Bold"/>
                         </StackPanel>
                     </Border>
 
@@ -97,7 +95,7 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                                 <TextBlock Text="📋" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Manual Router Power-Cycle Tutorial" FontSize="14" FontWeight="Bold" Foreground="#CBA6F7"/>
+                                <TextBlock Text="Restarting your router / modem" FontSize="14" FontWeight="Bold" Foreground="#CBA6F7"/>
                             </StackPanel>
 
                             <StackPanel Margin="6,0,0,0">
@@ -105,42 +103,42 @@
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="1" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Turn off your router / modem." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Turn off your router or modem." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="2" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Disconnect the power cable from the router." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Unplug the power cable from the back." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="3" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Wait at least 15 seconds." FontSize="13" Foreground="#FAB387" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Wait about 15 to 30 seconds." FontSize="13" Foreground="#FAB387" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="4" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Plug the power cable back in." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Plug the power cable back in and turn it on." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="5" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Wait until your internet connection is fully restored." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Wait until the lights stabilize and your internet comes back." FontSize="13" Foreground="#CDD6F4" VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                     <Border Background="#2A2A3D" CornerRadius="10" Width="22" Height="22" Margin="0,0,10,0" VerticalAlignment="Center">
                                         <TextBlock Text="6" FontSize="11" FontWeight="Bold" Foreground="#A6E3A1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Text="Check if your public IP address has changed." FontSize="13" Foreground="#A6E3A1" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Check if your public IP changed." FontSize="13" Foreground="#A6E3A1" FontWeight="Bold" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -151,9 +149,9 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                                 <TextBlock Text="ℹ️" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="ISP Configuration Note" FontSize="12" FontWeight="Bold" Foreground="#A6ADC8"/>
+                                <TextBlock Text="Provider Note" FontSize="12" FontWeight="Bold" Foreground="#A6ADC8"/>
                             </StackPanel>
-                            <TextBlock Text="The Dynamic IP Changer does not directly control your ISP. It only helps trigger a network refresh. The final IP change depends on your internet provider configuration." 
+                            <TextBlock Text="Some internet providers use CGNAT or static IP leases. If restarting doesn't change your public IP, your provider may have assigned a fixed IP." 
                                        FontSize="12" Foreground="#6C7086" TextWrapping="Wrap" LineHeight="16"/>
                         </StackPanel>
                     </Border>

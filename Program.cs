@@ -14,6 +14,8 @@ public static class Program
     [STAThread]
     public static void Main()
     {
+        EnforceSingleInstance();
+
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
             if (e.ExceptionObject is Exception ex)
@@ -174,4 +176,73 @@ public static class Program
             // Suppress secondary crash logging failure
         }
     }
+
+    private static void EnforceSingleInstance()
+    {
+        try
+        {
+            var currentProcess = Process.GetCurrentProcess();
+            int currentPid = currentProcess.Id;
+            string currentName = currentProcess.ProcessName;
+
+            var candidates = new System.Collections.Generic.HashSet<int>();
+            var processesToClose = new System.Collections.Generic.List<Process>();
+
+            // Collect processes matching current executable name
+            foreach (var p in Process.GetProcessesByName(currentName))
+            {
+                if (p.Id != currentPid && candidates.Add(p.Id))
+                {
+                    processesToClose.Add(p);
+                }
+            }
+
+            // Also check standard known executable names
+            string[] knownNames = { "Warframe AIO Tool", "GameLauncher" };
+            foreach (var name in knownNames)
+            {
+                if (!string.Equals(name, currentName, StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (var p in Process.GetProcessesByName(name))
+                    {
+                        if (p.Id != currentPid && candidates.Add(p.Id))
+                        {
+                            processesToClose.Add(p);
+                        }
+                    }
+                }
+            }
+
+            foreach (var oldProc in processesToClose)
+            {
+                try
+                {
+                    // Attempt graceful window close first
+                    if (oldProc.MainWindowHandle != IntPtr.Zero)
+                    {
+                        oldProc.CloseMainWindow();
+                    }
+
+                    if (!oldProc.WaitForExit(800))
+                    {
+                        oldProc.Kill(entireProcessTree: true);
+                        oldProc.WaitForExit(1000);
+                    }
+                }
+                catch
+                {
+                    try { oldProc.Kill(entireProcessTree: true); } catch { }
+                }
+                finally
+                {
+                    oldProc.Dispose();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[SingleInstance] Note: {ex.Message}");
+        }
+    }
 }
+

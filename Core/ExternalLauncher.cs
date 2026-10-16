@@ -50,7 +50,7 @@ public class ExternalLauncher
             {
                 try
                 {
-                    if (process.ProcessName.StartsWith("wf", StringComparison.OrdinalIgnoreCase))
+                    if (process.ProcessName.StartsWith("wf_", StringComparison.OrdinalIgnoreCase))
                     {
                         string? mainModulePath = process.MainModule?.FileName;
                         if (!string.IsNullOrEmpty(mainModulePath))

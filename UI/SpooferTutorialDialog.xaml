@@ -104,14 +104,14 @@
                 <!-- Interactive Step Selector Pills -->
                 <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
                     <Button x:Name="btnStepPill1" Content="1 Overview" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="1" Padding="10,4" Margin="0,0,6,6"/>
-                    <Button x:Name="btnStepPill2" Content="2 Spoofer" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="2" Padding="10,4" Margin="0,0,6,6"/>
+                    <Button x:Name="btnStepPill2" Content="2 Hostname" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="2" Padding="10,4" Margin="0,0,6,6"/>
                     <Button x:Name="btnStepPill3" Content="3 NetFixer" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="3" Padding="10,4" Margin="0,0,6,6"/>
                     <Button x:Name="btnStepPill4" Content="4 Network" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="4" Padding="10,4" Margin="0,0,6,6"/>
                     <Button x:Name="btnStepPill5" Content="5 Router IP" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="5" Padding="10,4" Margin="0,0,6,6"/>
-                    <Button x:Name="btnStepPill6" Content="6 Deep Clean" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="6" Padding="10,4" Margin="0,0,6,6"/>
+                    <Button x:Name="btnStepPill6" Content="6 Clean Files" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="6" Padding="10,4" Margin="0,0,6,6"/>
                     <Button x:Name="btnStepPill7" Content="7 GUID" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="7" Padding="10,4" Margin="0,0,6,6"/>
                     <Button x:Name="btnStepPill8" Content="8 Auto Spoof" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="8" Padding="10,4" Margin="0,0,6,6"/>
-                    <Button x:Name="btnStepPill9" Content="9 AIO &amp; VPN" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="9" Padding="10,4" Margin="0,0,0,6"/>
+                    <Button x:Name="btnStepPill9" Content="9 Launch &amp; VPN" Style="{StaticResource SecondaryButton}" Click="btnStepPill_Click" Tag="9" Padding="10,4" Margin="0,0,0,6"/>
                 </WrapPanel>
 
                 <Grid>
@@ -133,14 +133,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="🛡️" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="System Identity Restoration Overview" FontSize="16" FontWeight="Bold" Foreground="#CBA6F7"/>
+                            <TextBlock Text="How the Spoofer Works" FontSize="16" FontWeight="Bold" Foreground="#CBA6F7"/>
                         </StackPanel>
-                        <TextBlock Text="The Spoofer section is engineered for users needing a complete hardware identity reset to evade Warframe restrictions." 
+                        <TextBlock Text="This tab lets you change your system identifiers, wipe Warframe account data, and refresh your network." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,14" LineHeight="20"/>
                         <Border Background="#141420" CornerRadius="10" Padding="14" BorderBrush="#2B2B3F" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="💡 Core Concept:" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,6"/>
-                                <TextBlock Text="Warframe anti-cheat tracks Hardware Serial Numbers, System MachineGUID, MAC Address, Local Cache/Cookies, and Registry tokens. Following all steps ensures complete identity isolation." 
+                                <TextBlock Text="💡 What gets checked:" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,6"/>
+                                <TextBlock Text="Warframe checks your Windows MachineGUID, Hostname, Account cache folders (%LOCALAPPDATA%\Warframe), Registry keys, and your Public IP. Spoofing resets each of these vectors." 
                                            FontSize="12" Foreground="#A6ADC8" TextWrapping="Wrap" LineHeight="18"/>
                             </StackPanel>
                         </Border>
@@ -151,15 +151,15 @@
                 <Border x:Name="step2View" Style="{StaticResource TutorialCard}" Visibility="Collapsed">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                            <TextBlock Text="🚀" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Run Spoofer (PSWOA Hardware Spoofing)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="🖥️" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Hostname (Computer Name)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
                         </StackPanel>
-                        <TextBlock Text="The primary Spoofer executable (PSWOA) hooks into low-level drivers (AMIFLDRV64/AMIGENDRV64) to modify BIOS and motherboard serial numbers." 
+                        <TextBlock Text="Warframe checks your computer name and username in crash reports and logs. Clicking Randomize generates a clean Windows hostname." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,12" LineHeight="20"/>
-                        <TextBlock Text="Always run as Administrator to grant kernel driver access." 
-                                   FontSize="13" Foreground="#FAB387" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,14"/>
+                        <TextBlock Text="The new hostname takes effect when Windows restarts." 
+                                   FontSize="13" Foreground="#A6E3A1" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,14"/>
                         <Border Background="#141420" CornerRadius="10" Padding="12">
-                            <TextBlock Text="Target: Run Spoofer button" FontSize="12" FontFamily="Consolas" Foreground="#A6ADC8"/>
+                            <TextBlock Text="Target: Click 'Randomize' in the System Identity card." FontSize="12" FontFamily="Consolas" Foreground="#A6ADC8"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -169,14 +169,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="🔧" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="NetFixer (MAC Address Spoofer)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="NetFixer (MAC Address)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
                         </StackPanel>
-                        <TextBlock Text="NetFixer automates physical network adapter MAC address randomization across all active NICs." 
+                        <TextBlock Text="NetFixer randomizes the MAC address on your active network adapters and restarts them to apply the new address." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="20"/>
-                        <TextBlock Text="Modifies the NetworkAddress registry keys and restarts network interfaces to enforce new physical address telemetry." 
+                        <TextBlock Text="This changes your local adapter physical address without needing reboot." 
                                    FontSize="13" Foreground="#A6E3A1" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,14" LineHeight="18"/>
                         <Border Background="#141420" CornerRadius="10" Padding="12">
-                            <TextBlock Text="Target: NetFixer button" FontSize="12" FontFamily="Consolas" Foreground="#A6ADC8"/>
+                            <TextBlock Text="Target: Click 'NetFixer' in Manual Tools." FontSize="12" FontFamily="Consolas" Foreground="#A6ADC8"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -187,14 +187,14 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                 <TextBlock Text="🌐" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Network Settings (Complete Windows Network Reset)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
+                                <TextBlock Text="Network Settings (Network Reset)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
                             </StackPanel>
-                            <TextBlock Text="Network Settings performs a full Windows TCP/IP, Winsock, and DNS cache reset sequence." 
+                            <TextBlock Text="Flushes DNS cache, releases and renews your local IP, and resets the Windows TCP/IP stack." 
                                        FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,10"/>
                             <Border Background="#12121E" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="10" Padding="14">
                                 <StackPanel>
-                                    <TextBlock Text="Automated Operations:" FontSize="13" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,6"/>
-                                    <TextBlock Text="1. Flushes &amp; re-registers DNS resolver cache (ipconfig /flushdns)&#10;2. Releases &amp; renews local IP lease (ipconfig /release &amp; /renew)&#10;3. Resets Winsock catalog &amp; IP stack (netsh winsock reset)&#10;4. Clears ARP table entries and restarts networking services." 
+                                    <TextBlock Text="Commands executed:" FontSize="13" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,6"/>
+                                    <TextBlock Text="1. ipconfig /flushdns (clears DNS cache)&#10;2. arp -d * (clears ARP table)&#10;3. ipconfig /release &amp; /renew (refreshes local IP)&#10;4. netsh winsock reset &amp; netsh int ip reset" 
                                                FontSize="12" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="18" FontFamily="Consolas"/>
                                 </StackPanel>
                             </Border>
@@ -207,14 +207,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="🔄" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Dynamic IP Changer (Router Power-Cycle)" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="Changing your Public IP" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
                         </StackPanel>
-                        <TextBlock Text="If your public IP address remains unchanged after Network Settings, perform a manual router power-cycle." 
+                        <TextBlock Text="If your public IP didn't change after Network Settings, you can restart your modem/router." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="20"/>
-                        <TextBlock Text="Disconnect router power for at least 15-30 seconds to force your Internet Service Provider (ISP) to allocate a fresh public IP lease." 
+                        <TextBlock Text="Turn off your modem or unplug the power cable for about 15-30 seconds so your internet provider allocates a new public IP." 
                                    FontSize="13" Foreground="#FAB387" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,14" LineHeight="18"/>
                         <Border Background="#141420" CornerRadius="10" Padding="12">
-                            <TextBlock Text="Tip: Access detailed instructions via 'Dynamic IP Changer' button." FontSize="12" Foreground="#A6ADC8"/>
+                            <TextBlock Text="Tip: Open 'Dynamic IP Changer' for step-by-step instructions." FontSize="12" Foreground="#A6ADC8"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -224,14 +224,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="🧹" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Clean Warframe Files (Comprehensive Deep Purge)" FontSize="16" FontWeight="Bold" Foreground="#A6E3A1"/>
+                            <TextBlock Text="Clean Warframe Files &amp; Cache" FontSize="16" FontWeight="Bold" Foreground="#A6E3A1"/>
                         </StackPanel>
-                        <TextBlock Text="Warframe stores hardware tokens, crash logs, and session cookies across LocalAppData, AppData, Temp, and the Windows Registry." 
+                        <TextBlock Text="Warframe stores account hashes, crash dumps, and login tokens across AppData and the registry." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,8" LineHeight="20"/>
-                        <TextBlock Text="The upgraded Clean Warframe Files system automatically terminates active game locks, removes read-only attributes, purges all Local/Roaming/Temp Warframe &amp; DigitalExtremes folders, and deletes HKCU\\Software\\Digital Extremes registry keys!" 
+                        <TextBlock Text="This cleans all account hash folders in %LOCALAPPDATA%\Warframe, crash logs, all H.Misc cache files in Cache.Windows, and Digital Extremes registry keys (while keeping your keybinds and EE.cfg intact)." 
                                    FontSize="13" Foreground="#A6E3A1" TextWrapping="Wrap" FontWeight="Bold" Margin="0,0,0,14" LineHeight="18"/>
                         <Border Background="#141420" CornerRadius="10" Padding="12">
-                            <TextBlock Text="Status: Deep Purge Engine Ready" FontSize="12" Foreground="#A6E3A1" FontWeight="Bold"/>
+                            <TextBlock Text="Target: Click 'Clean Files &amp; Cache' in Manual Tools." FontSize="12" Foreground="#A6E3A1" FontWeight="Bold"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -241,14 +241,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="🎲" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="System MachineGUID Spoofing" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="MachineGUID Spoofing" FontSize="16" FontWeight="Bold" Foreground="#89B4FA"/>
                         </StackPanel>
-                        <TextBlock Text="Windows assigns a unique MachineGUID stored in HKLM\\SOFTWARE\\Microsoft\\Cryptography." 
+                        <TextBlock Text="Windows assigns a unique MachineGUID stored in HKLM\SOFTWARE\Microsoft\Cryptography." 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,8" LineHeight="20"/>
-                        <TextBlock Text="The GUID Spoof button generates a new cryptographically secure UUID4 and applies it directly to Windows system registry and local settings." 
+                        <TextBlock Text="Clicking 'New GUID' generates a new random GUID and applies it directly to the Windows registry." 
                                    FontSize="13" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,12" LineHeight="18"/>
                         <Border Background="#161A29" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="10" Padding="12">
-                            <TextBlock Text="✔ Integrated into Auto Spoof workflow Stage 1." FontSize="13" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="✔ Included automatically in Auto Spoof." FontSize="13" FontWeight="Bold" Foreground="#89B4FA"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -258,14 +258,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="⚡" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Auto Spoof (Stable Automated Workflow)" FontSize="16" FontWeight="Bold" Foreground="#F38BA8"/>
+                            <TextBlock Text="Auto Spoof" FontSize="16" FontWeight="Bold" Foreground="#F38BA8"/>
                         </StackPanel>
-                        <TextBlock Text="Auto Spoof combines all 6 essential spoofing stages into a single automated sequence:" 
+                        <TextBlock Text="Auto Spoof runs all steps in order with a single click:" 
                                    FontSize="14" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,8" LineHeight="20"/>
-                        <TextBlock Text="[1/6] MachineGUID Spoofing ➔ [2/6] PSWOA Hardware Spoof ➔ [3/6] NetFixer MAC Spoof ➔ [4/6] 10s Standby Delay ➔ [5/6] Warframe Deep Purge ➔ [6/6] Network Settings Reset" 
+                        <TextBlock Text="1. New MachineGUID &amp; Hostname ➔ 2. NetFixer ➔ 3. 10s wait ➔ 4. Clean Files &amp; Cache ➔ 5. Network Settings" 
                                    FontSize="12" Foreground="#F38BA8" TextWrapping="Wrap" Margin="0,0,0,12" LineHeight="18" FontFamily="Consolas" FontWeight="Bold"/>
                         <Border Background="#2B151C" BorderBrush="#F38BA8" BorderThickness="1" CornerRadius="10" Padding="12">
-                            <TextBlock Text="⚡ One-click complete identity restoration!" FontSize="13" FontWeight="Bold" Foreground="#F38BA8"/>
+                            <TextBlock Text="⚡ Runs everything automatically." FontSize="13" FontWeight="Bold" Foreground="#F38BA8"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -275,18 +275,16 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock Text="⚡" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="AIO Cheat &amp; Cloudflare WARP VPN" FontSize="16" FontWeight="Bold" Foreground="#FAB387"/>
+                            <TextBlock Text="Launching Warframe &amp; VPN Notice" FontSize="16" FontWeight="Bold" Foreground="#FAB387"/>
                         </StackPanel>
-                        <TextBlock Text="The Dashboard section features the AIO Cheat Execution button. Clicking it auto-launches Warframe, waits for Warframe.x64.exe to initialize, holds for 5s stabilization, and auto-executes OwHelper." 
+                        <TextBlock Text="Use the Launch button in the main tab to start Warframe and inject OwHelper automatically." 
                                    FontSize="13" Foreground="#CDD6F4" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="18"/>
-                        <Border Background="#1A1826" BorderBrush="#FAB387" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,14">
+                        <Border Background="#28151A" BorderBrush="#F38BA8" BorderThickness="1" CornerRadius="10" Padding="14">
                             <StackPanel>
-                                <TextBlock Text="Recommended VPN: 1.1.1.1 (Cloudflare WARP)" FontSize="13" FontWeight="Bold" Foreground="#FAB387" Margin="0,0,0,4"/>
-                                <TextBlock Text="Cloudflare WARP masks your public IP address with low latency to prevent IP bans." FontSize="12" Foreground="#A6ADC8" TextWrapping="Wrap"/>
+                                <TextBlock Text="⚠️ Important: Avoid Cloudflare WARP and Datacenter VPNs" FontSize="13" FontWeight="Bold" Foreground="#F38BA8" Margin="0,0,0,4"/>
+                                <TextBlock Text="Warframe's Akamai firewall blocks Cloudflare WARP (1.1.1.1) and known datacenter IP ranges with 'Falha ao entrar, verifique suas informações' (HTTP 403). Use your regular residential connection or a clean IP." FontSize="12" Foreground="#CDD6F4" TextWrapping="Wrap" LineHeight="17"/>
                             </StackPanel>
                         </Border>
-
-                        <Button x:Name="btnDownloadWarp" Content="🌐  Download 1.1.1.1" Style="{StaticResource WarpButton}" Click="btnDownloadWarp_Click" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>
             </Grid>

@@ -11,9 +11,72 @@ namespace GameLauncher.Core;
 public class SpooferManager
 {
     private const string ResourceFolderName = "Spoof resources";
-    private const string MainSpooferSubPath = @"Spoofer\PSWOA - run as admin to spoof.exe";
     private const string NetFixerSubPath = "NetFixer.bat";
     private const string NetworkSettingsSubPath = "Network Settings.bat";
+
+    private static readonly string EmbeddedNetFixerBat = @"@echo off
+SETLOCAL ENABLEDELAYEDEXPANSION
+SETLOCAL ENABLEEXTENSIONS
+
+:: Generate and implement a MAC address starting with '02-'
+FOR /F ""tokens=1"" %%a IN ('wmic nic where physicaladapter^=true get deviceid ^| findstr [0-9]') DO (
+    SET ""MAC=02-""
+    CALL :MAC
+    FOR %%b IN (0 00 000) DO (
+        REG QUERY ""HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}\%%b%%a"" >NUL 2>NUL && REG ADD ""HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}\%%b%%a"" /v NetworkAddress /t REG_SZ /d !MAC! /f >NUL 2>NUL
+    )
+)
+
+:: Disable power saving mode for network adapters
+FOR /F ""tokens=1"" %%a IN ('wmic nic where physicaladapter^=true get deviceid ^| findstr [0-9]') DO (
+    FOR %%b IN (0 00 000) DO (
+        REG QUERY ""HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}\%%b%%a"" >NUL 2>NUL && REG ADD ""HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}\%%b%%a"" /v PnPCapabilities /t REG_DWORD /d 24 /f >NUL 2>NUL
+    )
+)
+
+:: Reset NIC adapters so the new MAC address is implemented and the power saving mode is disabled.
+FOR /F ""tokens=2 delims=, skip=2"" %%a IN ('""wmic nic where (netconnectionid like '%%') get netconnectionid,netconnectionstatus /format:csv""') DO (
+    netsh interface set interface name=""%%a"" disable >NUL 2>NUL
+    netsh interface set interface name=""%%a"" enable >NUL 2>NUL
+)
+
+GOTO :EOF
+
+:MAC
+SET COUNT=0
+SET GEN=ABCDEF0123456789
+SET GEN2=29ACFED4345686876
+:MACLOOP
+SET /a COUNT+=1
+SET RND=%random%
+SET /A RND=RND%%16
+SET RNDGEN=!GEN:~%RND%,1!
+SET /A RND2=RND%%4
+SET RNDGEN2=!GEN2:~%RND2%,1!
+SET MAC=!MAC!!RNDGEN2!
+IF !COUNT! LEQ 10 GOTO MACLOOP
+";
+
+    private static readonly string EmbeddedNetworkSettingsBat = @"@echo off
+setlocal EnableDelayedExpansion
+
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [!] Administrator privileges required.
+    exit /b 1
+)
+
+ipconfig /flushdns >nul 2>&1
+arp -d * >nul 2>&1
+netsh interface ip delete arpcache >nul 2>&1
+ipconfig /release >nul 2>&1
+ipconfig /renew >nul 2>&1
+ipconfig /registerdns >nul 2>&1
+netsh winsock reset >nul 2>&1
+netsh int ip reset >nul 2>&1
+
+exit /b 0
+";
 
     private readonly AppSettings _settings;
     private readonly LoggerService _logger;
@@ -39,81 +102,39 @@ public class SpooferManager
         string downloads = Path.Combine(userProfile, "Downloads");
         string tempDir = Path.GetTempPath();
 
-        // ── 1. Immediate vicinity of the running executable ──
         candidates.Add(Path.Combine(baseDir, ResourceFolderName));
         candidates.Add(Path.Combine(baseDir, "SpoofResources"));
-        candidates.Add(Path.Combine(baseDir, "spoof_resources"));
-        candidates.Add(Path.Combine(baseDir, "Spoofer"));
-
-        // ── 2. Current working directory ──
         candidates.Add(Path.Combine(currentDir, ResourceFolderName));
-        candidates.Add(Path.Combine(currentDir, "SpoofResources"));
 
-        // ── 3. Project root (development mode) ──
         string? projectRoot = FindProjectRootDirectory(baseDir);
         if (!string.IsNullOrEmpty(projectRoot))
         {
             candidates.Add(Path.Combine(projectRoot, ResourceFolderName));
-            candidates.Add(Path.Combine(projectRoot, "SpoofResources"));
         }
 
-        // ── 4. Parent directory traversal (up to 5 levels) ──
         for (int i = 1; i <= 5; i++)
         {
             string relative = string.Join(Path.DirectorySeparatorChar.ToString(), Enumerable.Repeat("..", i));
             candidates.Add(Path.Combine(baseDir, relative, ResourceFolderName));
-            candidates.Add(Path.Combine(baseDir, relative, "SpoofResources"));
         }
 
-        // ── 5. User profile directories ──
         candidates.Add(Path.Combine(desktop, ResourceFolderName));
-        candidates.Add(Path.Combine(desktop, "WarframeHelper", ResourceFolderName));
-        candidates.Add(Path.Combine(desktop, "Warframe-AIO-Tool", ResourceFolderName));
         candidates.Add(Path.Combine(desktop, "Warframe-AIO-Tool-main", ResourceFolderName));
-
-        candidates.Add(Path.Combine(documents, ResourceFolderName));
-        candidates.Add(Path.Combine(documents, "WarframeHelper", ResourceFolderName));
-        candidates.Add(Path.Combine(documents, "Warframe-AIO-Tool", ResourceFolderName));
-
         candidates.Add(Path.Combine(downloads, ResourceFolderName));
-        candidates.Add(Path.Combine(downloads, "WarframeHelper", ResourceFolderName));
-        candidates.Add(Path.Combine(downloads, "Warframe-AIO-Tool", ResourceFolderName));
-        candidates.Add(Path.Combine(downloads, "Warframe-AIO-Tool-main", ResourceFolderName));
-
-        // ── 6. AppData locations ──
         candidates.Add(Path.Combine(localAppData, "GameLauncher", ResourceFolderName));
-        candidates.Add(Path.Combine(localAppData, "WarframeHelper", ResourceFolderName));
         candidates.Add(Path.Combine(roamingAppData, "GameLauncher", ResourceFolderName));
-        candidates.Add(Path.Combine(roamingAppData, "WarframeHelper", ResourceFolderName));
-
-        // ── 7. ProgramData ──
-        candidates.Add(Path.Combine(programData, "GameLauncher", ResourceFolderName));
-        candidates.Add(Path.Combine(programData, "WarframeHelper", ResourceFolderName));
-
-        // ── 8. Temp directory ──
         candidates.Add(Path.Combine(tempDir, ResourceFolderName));
-        candidates.Add(Path.Combine(tempDir, "GameLauncher", ResourceFolderName));
-        candidates.Add(Path.Combine(tempDir, "WarframeHelper", ResourceFolderName));
 
-        // ── 9. All fixed drives ──
         try
         {
             foreach (var drive in DriveInfo.GetDrives())
             {
                 if (drive.DriveType != DriveType.Fixed || !drive.IsReady) continue;
                 string root = drive.RootDirectory.FullName;
-
                 candidates.Add(Path.Combine(root, "GameLauncher", ResourceFolderName));
-                candidates.Add(Path.Combine(root, "WarframeHelper", ResourceFolderName));
-                candidates.Add(Path.Combine(root, "Tools", "GameLauncher", ResourceFolderName));
-                candidates.Add(Path.Combine(root, "Tools", "WarframeHelper", ResourceFolderName));
             }
         }
         catch { }
-
-        // ── 10. Hardcoded known dev/test paths ──
-        candidates.Add(@"C:\Users\Administrador\Desktop\WarframeHelper\Spoof resources");
-        candidates.Add(@"C:\Users\Administrador\Desktop\Warframe-AIO-Tool-main\Spoof resources");
 
         var tested = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var candidate in candidates)
@@ -128,63 +149,44 @@ public class SpooferManager
                     return fullPath;
                 }
             }
-            catch
-            {
-                // Ignore path format exceptions gracefully
-            }
+            catch { }
         }
 
         return null;
     }
 
-    public string? FindResourcePath(string subPath)
+    public string FindOrExtractScript(string scriptFileName, string embeddedScriptContent)
     {
+        // 1. Try local disk candidate if present
         string? root = GetSpoofResourcesDirectory();
-        if (string.IsNullOrEmpty(root)) return null;
-
-        string target = Path.Combine(root, subPath);
-        return File.Exists(target) ? target : null;
-    }
-
-    public Task<bool> RunMainSpooferAsync(Action<string>? statusCallback = null)
-    {
-        string? path = FindResourcePath(MainSpooferSubPath);
-        if (string.IsNullOrEmpty(path))
+        if (!string.IsNullOrEmpty(root))
         {
-            string msg = "Spoofer executable (PSWOA - run as admin to spoof.exe) not found.";
-            _logger.LogError(msg);
-            statusCallback?.Invoke($"❌ {msg}");
-            return Task.FromResult(false);
+            string target = Path.Combine(root, scriptFileName);
+            if (File.Exists(target))
+            {
+                return target;
+            }
         }
 
-        return ExecuteToolAsync("Run Spoofer", path, requireAdmin: true, statusCallback);
+        // 2. Fallback: extract embedded script directly to %LOCALAPPDATA%\GameLauncher\scripts\
+        string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string scriptsDir = Path.Combine(localAppData, "GameLauncher", "scripts");
+        Directory.CreateDirectory(scriptsDir);
+
+        string embeddedPath = Path.Combine(scriptsDir, scriptFileName);
+        File.WriteAllText(embeddedPath, embeddedScriptContent);
+        return embeddedPath;
     }
 
     public Task<bool> RunNetFixerAsync(Action<string>? statusCallback = null)
     {
-        string? path = FindResourcePath(NetFixerSubPath);
-        if (string.IsNullOrEmpty(path))
-        {
-            string msg = "NetFixer.bat script not found.";
-            _logger.LogError(msg);
-            statusCallback?.Invoke($"❌ {msg}");
-            return Task.FromResult(false);
-        }
-
+        string path = FindOrExtractScript(NetFixerSubPath, EmbeddedNetFixerBat);
         return ExecuteToolAsync("NetFixer", path, requireAdmin: true, statusCallback);
     }
 
     public Task<bool> RunNetworkSettingsAsync(Action<string>? statusCallback = null)
     {
-        string? path = FindResourcePath(NetworkSettingsSubPath);
-        if (string.IsNullOrEmpty(path))
-        {
-            string msg = "Network Settings.bat script not found.";
-            _logger.LogError(msg);
-            statusCallback?.Invoke($"❌ {msg}");
-            return Task.FromResult(false);
-        }
-
+        string path = FindOrExtractScript(NetworkSettingsSubPath, EmbeddedNetworkSettingsBat);
         return ExecuteToolAsync("Network Settings", path, requireAdmin: true, statusCallback);
     }
 

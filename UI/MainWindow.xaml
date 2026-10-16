@@ -331,17 +331,23 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <!-- Background Layer 2: Subtle Ambient Floating Orbs -->
-            <Canvas IsHitTestVisible="False" Opacity="0.35">
-                <Ellipse Width="360" Height="360" Canvas.Left="-70" Canvas.Top="-70" Fill="#1889B4FA">
-                    <Ellipse.Effect>
-                        <BlurEffect Radius="100"/>
-                    </Ellipse.Effect>
+            <!-- Background Layer 2: Subtle Ambient Floating Orbs (Zero-Overhead Analytical Gradient) -->
+            <Canvas IsHitTestVisible="False" Opacity="0.45">
+                <Ellipse Width="360" Height="360" Canvas.Left="-70" Canvas.Top="-70">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                            <GradientStop Color="#2589B4FA" Offset="0"/>
+                            <GradientStop Color="#0089B4FA" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
                 </Ellipse>
-                <Ellipse Width="400" Height="400" Canvas.Right="-90" Canvas.Bottom="-90" Fill="#14CBA6F7">
-                    <Ellipse.Effect>
-                        <BlurEffect Radius="110"/>
-                    </Ellipse.Effect>
+                <Ellipse Width="400" Height="400" Canvas.Right="-90" Canvas.Bottom="-90">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                            <GradientStop Color="#22CBA6F7" Offset="0"/>
+                            <GradientStop Color="#00CBA6F7" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
                 </Ellipse>
             </Canvas>
 

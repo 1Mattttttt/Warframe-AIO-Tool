@@ -343,9 +343,9 @@
                             <Image x:Name="imgSettingsProfile" Source="pack://application:,,,/Assets/profile.png" Width="56" Height="56" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="Warframe AIO Tool - Complete Companion Suite" FontSize="14" FontWeight="Bold" Foreground="#89B4FA"/>
+                            <TextBlock Text="Warframe AIO Tool" FontSize="14" FontWeight="Bold" Foreground="#89B4FA"/>
                             <TextBlock Text="made by #1 Matt fan in rffc with love" FontSize="13" FontWeight="SemiBold" Foreground="#CBA6F7" Margin="0,3,0,4"/>
-                            <TextBlock Text="Designed for seamless Warframe launching, SDK killer protection, and identity spoofer utilities." FontSize="11" Foreground="#A6ADC8" TextWrapping="Wrap"/>
+                            <TextBlock Text="Launcher, Discord SDK Killer e Spoofer." FontSize="11" Foreground="#A6ADC8" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Grid>
                 </Border>

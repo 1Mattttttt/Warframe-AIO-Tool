@@ -10,3 +10,7 @@ publish/
 publish-single/
 publish-release/
 *.zip
+prompt.txt
+
+!cheat/
+!cheat/**

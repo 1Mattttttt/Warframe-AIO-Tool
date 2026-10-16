@@ -142,10 +142,10 @@
                         </TextBlock.Effect>
                     </TextBlock>
                     <Border x:Name="badgeSpooferModule" Background="#4425273C" BorderBrush="#CBA6F7" BorderThickness="1" CornerRadius="8" Padding="8,3" Margin="14,0,0,0" VerticalAlignment="Center">
-                        <TextBlock x:Name="txtSpooferBadgeText" Text="STABLE MODULE" FontSize="11" FontWeight="Bold" Foreground="#CBA6F7"/>
+                        <TextBlock x:Name="txtSpooferBadgeText" Text="SYSTEM CLEAN" FontSize="11" FontWeight="Bold" Foreground="#CBA6F7"/>
                     </Border>
                 </StackPanel>
-                <TextBlock Text="Hardware &amp; Identity Management Suite" FontSize="13" Foreground="#A6ADC8" Margin="0,4,0,0"/>
+                <TextBlock Text="System Identity &amp; Game Cleaner" FontSize="13" Foreground="#A6ADC8" Margin="0,4,0,0"/>
             </StackPanel>
         </Grid>
 
@@ -153,7 +153,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel Orientation="Vertical">
                 
-                <!-- AUTO SPOOF (STABLE) MAIN ACTION CARD -->
+                <!-- AUTO SPOOF MAIN ACTION CARD -->
                 <Border x:Name="cardAutoSpoofBanner" Style="{StaticResource SpooferCard}" Background="#4426151E" BorderBrush="#F38BA8" BorderThickness="2" Margin="0,0,0,16">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -162,126 +162,110 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                                <TextBlock Text="🚨  Auto Spoof (Stable)" FontSize="18" FontWeight="Bold" Foreground="#F38BA8"/>
+                                <TextBlock Text="⚡  Auto Spoof" FontSize="18" FontWeight="Bold" Foreground="#F38BA8"/>
                                 <Border Background="#553B1822" CornerRadius="6" Padding="8,2" Margin="10,0,0,0">
-                                    <TextBlock Text="AUTOMATED WORKFLOW" FontSize="10" FontWeight="Bold" Foreground="#F38BA8"/>
+                                    <TextBlock Text="FULL RESET" FontSize="10" FontWeight="Bold" Foreground="#F38BA8"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Text="automated hardware &amp; identity workflow" FontSize="12" FontWeight="SemiBold" Foreground="#F38BA8" Margin="0,0,0,6"/>
-                            <TextBlock Text="Automates GUID Spoofing, PSWOA, NetFixer, 10s Standby, Deep File Cleanup, and Network Settings sequentially." 
+                            <TextBlock Text="One-click identity spoof and cache wipe" FontSize="12" FontWeight="SemiBold" Foreground="#F38BA8" Margin="0,0,0,6"/>
+                            <TextBlock Text="Spoofs your MachineGUID and Hostname, resets network adapters, wipes account cache/H.Misc files, and flushes DNS." 
                                        FontSize="12" Foreground="#A6ADC8" TextWrapping="Wrap" LineHeight="17"/>
                         </StackPanel>
 
                         <Button Grid.Column="1" x:Name="btnAutoSpoof" Style="{StaticResource AutoSpoofButton}" Click="btnAutoSpoof_Click" VerticalAlignment="Center">
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                <TextBlock x:Name="txtAutoSpoofBtnTitle" Text="⚡ Auto Spoof (Stable)" FontSize="14" FontWeight="Bold" Foreground="#11111B" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="txtAutoSpoofBtnSub" Text="automated workflow" FontSize="11" FontWeight="SemiBold" Foreground="#2A0F17" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="txtAutoSpoofBtnTitle" Text="⚡ Auto Spoof" FontSize="14" FontWeight="Bold" Foreground="#11111B" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="txtAutoSpoofBtnSub" Text="Run All Steps" FontSize="11" FontWeight="SemiBold" Foreground="#2A0F17" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </Grid>
                 </Border>
 
-                <!-- SYSTEM GUID SPOOFER CARD -->
-                <Border x:Name="cardGuidSpoofer" Style="{StaticResource SpooferCard}" Background="#44181826" BorderBrush="#89B4FA" BorderThickness="1">
+                <!-- SYSTEM IDENTITY & GUID SPOOFER CARD -->
+                <Border x:Name="cardGuidSpoofer" Style="{StaticResource SpooferCard}" Background="#44181826" BorderBrush="#89B4FA" BorderThickness="1" Margin="0,0,0,16">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                        
+                        <!-- Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="🎲" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="SYSTEM GUID SPOOFER" FontSize="13" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                                <TextBlock Text="SYSTEM IDENTITY &amp; GUID" FontSize="13" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
                             </StackPanel>
                             <Border Background="#25273C" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="6" Padding="6,1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <TextBlock Text="HARDWARE IDENTIFIER" FontSize="10" FontWeight="Bold" Foreground="#89B4FA"/>
+                                <TextBlock Text="WINDOWS IDENTIFIERS" FontSize="10" FontWeight="Bold" Foreground="#89B4FA"/>
                             </Border>
                         </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="txtCurrentGuidDisplay" Grid.Column="0" IsReadOnly="True" Background="#181824" Foreground="#A6E3A1" 
-                                     BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontFamily="Consolas, Cascadia Code" 
-                                     FontSize="13" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <Button Grid.Column="1" x:Name="btnCopyGuid" Content="📋 Copy GUID" Style="{StaticResource SecondaryButton}" Click="btnCopyGuid_Click" Margin="0,0,10,0" Padding="14,8"/>
-                            <Button Grid.Column="2" x:Name="btnSpoofGuid" Content="🎲 Spoof New GUID" Style="{StaticResource AccentButton}" Click="btnSpoofGuid_Click" Margin="0" Padding="16,8"/>
-                        </Grid>
-                    </Grid>
-                </Border>
 
-                <!-- TEMPORARY SPOOFER (WARFRAME KERNEL DRIVER) CARD -->
-                <Border x:Name="cardTempSpoofer" Style="{StaticResource SpooferCard}" Background="#44221A28" BorderBrush="#FAB387" BorderThickness="1.5" Margin="0,0,0,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <Grid Grid.Row="0" Margin="0,0,0,10">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="🛡️" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="TEMPORARY SPOOFER (WARFRAME DRIVER)" FontSize="13" FontWeight="Bold" Foreground="#FAB387" VerticalAlignment="Center"/>
-                                <Border Background="#333B2518" BorderBrush="#FAB387" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="KERNEL DRIVER (BYOVD)" FontSize="9" FontWeight="Bold" Foreground="#FAB387"/>
-                                </Border>
-                                <Border Background="#25182824" BorderBrush="#A6E3A1" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="6,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="RAM ONLY • RESETS ON REBOOT" FontSize="9" FontWeight="Bold" Foreground="#A6E3A1"/>
-                                </Border>
-                            </StackPanel>
+                        <!-- MachineGUID Row -->
+                        <Grid Grid.Row="1" Margin="0,0,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Windows MachineGUID (HKLM\SOFTWARE\Microsoft\Cryptography):" FontSize="11" FontWeight="SemiBold" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtCurrentGuidDisplay" Grid.Column="0" IsReadOnly="True" Background="#181824" Foreground="#A6E3A1" 
+                                         BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontFamily="Consolas, Cascadia Code" 
+                                         FontSize="13" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Button Grid.Column="1" x:Name="btnCopyGuid" Content="Copy" Style="{StaticResource SecondaryButton}" Click="btnCopyGuid_Click" Margin="0,0,10,0" Padding="14,8"/>
+                                <Button Grid.Column="2" x:Name="btnSpoofGuid" Content="🎲 New GUID" Style="{StaticResource AccentButton}" Click="btnSpoofGuid_Click" Margin="0" Padding="16,8"/>
+                            </Grid>
                         </Grid>
 
-                        <!-- Description -->
-                        <StackPanel Grid.Row="1" Margin="0,0,0,12">
-                            <TextBlock Text="Kernel-level hardware identifier virtualization tailored for Warframe. Uses vulnerable driver mapping (Intel BYOVD) to dynamically alter Disk Model &amp; Serial, CPU Serial, BIOS, Motherboard, smBIOS UUID, and MAC Address in volatile RAM without altering motherboard NVRAM." 
-                                       FontSize="12" Foreground="#A6ADC8" TextWrapping="Wrap" LineHeight="17"/>
-                        </StackPanel>
-
-                        <!-- Actions & Info Row -->
+                        <!-- Hostname (ComputerName) & Active User Row -->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="0" x:Name="btnMapTempSpoofer" Style="{StaticResource AccentButton}" Background="#FAB387" Click="btnMapTempSpoofer_Click" Padding="16,8" Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock Text="⚡" FontSize="13" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="txtMapTempSpooferBtn" Text="Map Temp Spoofer" FontSize="12" FontWeight="Bold" Foreground="#11111B" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                            <!-- Hostname / Computer Name -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Hostname (Computer Name):" FontSize="11" FontWeight="SemiBold" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="txtCurrentComputerName" Grid.Column="0" IsReadOnly="True" Background="#181824" Foreground="#89B4FA" 
+                                             BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontFamily="Consolas, Cascadia Code" 
+                                             FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <Button Grid.Column="1" x:Name="btnRandomizeComputerName" Content="🎲 Randomize" Style="{StaticResource SecondaryButton}" Click="btnRandomizeComputerName_Click" Padding="12,6"/>
+                                </Grid>
+                            </StackPanel>
 
-                            <Button Grid.Column="1" x:Name="btnVerifySerials" Content="🔍  Check Serials" Style="{StaticResource SecondaryButton}" Click="btnVerifySerials_Click" Margin="0,0,10,0" Padding="14,8"/>
-
-                            <Border Grid.Column="2" Background="#2212141F" BorderBrush="#2F334D" BorderThickness="1" CornerRadius="8" Padding="10,5" VerticalAlignment="Center" Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <TextBlock Text="Driver Status:" FontSize="11" FontWeight="Bold" Foreground="#A6ADC8" Margin="0,0,6,0"/>
-                                    <TextBlock x:Name="txtTempDriverStatus" Text="Not Loaded (Factory Serials)" FontSize="11" FontWeight="SemiBold" Foreground="#89B4FA"/>
-                                </StackPanel>
-                            </Border>
-
-                            <Button Grid.Column="3" x:Name="btnTempSpooferLearnMore" Content="ℹ️  How Temp Spoofer Works" Style="{StaticResource SecondaryButton}" Click="btnTempSpooferLearnMore_Click" Margin="0" Padding="14,8"/>
+                            <!-- Active Windows User -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Windows User:" FontSize="11" FontWeight="SemiBold" Foreground="#A6ADC8" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtCurrentUserName" IsReadOnly="True" Background="#181824" Foreground="#BAC2DE" 
+                                         BorderBrush="#313244" BorderThickness="1" Padding="10,6" FontFamily="Consolas, Cascadia Code" 
+                                         FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Border>
 
                 <!-- MODULE INDIVIDUAL CONTROLS BAR -->
-                <Border x:Name="cardModuleControls" Style="{StaticResource SpooferCard}">
+                <Border x:Name="cardModuleControls" Style="{StaticResource SpooferCard}" Margin="0,0,0,16">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="MANUAL TOOL CONTROLS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" Margin="0,0,0,14"/>
+                        <TextBlock Text="MANUAL TOOLS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" Margin="0,0,0,14"/>
                         
                         <WrapPanel Orientation="Horizontal">
-                            <Button x:Name="btnRunMainSpoofer" Content="🚀  Run Spoofer" Style="{StaticResource PrimaryLaunchButton}" Click="btnRunMainSpoofer_Click"/>
+                            <Button x:Name="btnCleanWarframeFiles" Content="🧹  Clean Files &amp; Cache" Style="{StaticResource SolidCleanButton}" Click="btnCleanWarframeFiles_Click"/>
                             <Button x:Name="btnRunNetFixer" Content="🔧  NetFixer" Style="{StaticResource SecondaryButton}" Click="btnRunNetFixer_Click"/>
                             <Button x:Name="btnRunNetworkSettings" Content="🌐  Network Settings" Style="{StaticResource SecondaryButton}" Click="btnRunNetworkSettings_Click"/>
                             <Button x:Name="btnRunDynamicIpChanger" Content="🔄  Dynamic IP Changer" Style="{StaticResource AccentButton}" Click="btnRunDynamicIpChanger_Click"/>
-                            <Button x:Name="btnCleanWarframeFiles" Content="🧹  Clean Warframe Files" Style="{StaticResource SolidCleanButton}" Click="btnCleanWarframeFiles_Click"/>
                             <Button x:Name="btnSpooferTutorial" Content="📖  Tutorial" Style="{StaticResource TutorialButton}" Click="btnSpooferTutorial_Click"/>
                         </WrapPanel>
 
@@ -306,7 +290,7 @@
                         <Grid Grid.Row="0" Margin="0,0,0,10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📋" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="txtLogHeader" Text="SPOOFER EXECUTION LOGS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="txtLogHeader" Text="LOGS" FontSize="12" FontWeight="Bold" Foreground="#CBA6F7" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
 

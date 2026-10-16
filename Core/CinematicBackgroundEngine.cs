@@ -593,8 +593,16 @@ public class CinematicBackgroundEngine : FrameworkElement
                     break;
             }
 
-            double pulse = Math.Sin(_animTime * 2.2 + p.Phase) * 0.25 + 1.0;
-            double currentRadius = p.BaseRadius * pulse;
+            double currentRadius;
+            if (p.Kind == ParticleKind.DeepSpaceDust)
+            {
+                currentRadius = p.BaseRadius;
+            }
+            else
+            {
+                double pulse = Math.Sin(_animTime * 2.2 + p.Phase) * 0.25 + 1.0;
+                currentRadius = p.BaseRadius * pulse;
+            }
 
             if (particleBrush != null)
             {
