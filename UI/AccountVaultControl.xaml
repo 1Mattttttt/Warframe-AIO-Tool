@@ -1,0 +1,177 @@
+<UserControl x:Class="GameLauncher.UI.AccountVaultControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Foreground="#CDD6F4"
+             FontFamily="Segoe UI, Inter, Cascadia Code, sans-serif">
+
+    <UserControl.Resources>
+        <!-- Modern Button Base Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#89B4FA"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" TargetName="border" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryLaunchButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#A6E3A1"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="20,10"/>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#1E1E2E"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#89B4FA"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#F38BA8"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="0,0,10,24" Orientation="Vertical">
+
+            <!-- MODULE HEADER CARD -->
+            <Border Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="14" Padding="20,16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🔐" FontSize="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="ACCOUNT VAULT" FontSize="16" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Save and swap Warframe accounts instantly. Automatically wipes old tokens and spoofs GUID/MAC on switch."
+                                   FontSize="12" Foreground="#A6ADC8" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <!-- AUTO-SPOOF TOGGLE -->
+                    <Border Grid.Column="1" Background="#11111B" BorderBrush="#313244" BorderThickness="1" CornerRadius="10" Padding="12,8" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Auto-Spoof on Switch:" FontSize="12" FontWeight="SemiBold" Foreground="#CDD6F4" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Button x:Name="btnToggleAutoSpoof" Content="✔ ENABLED" Background="#A6E3A1" Foreground="#11111B" FontWeight="Bold" FontSize="11" Padding="10,4" Margin="0" Style="{StaticResource ModernButton}" Click="btnToggleAutoSpoof_Click"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- STATUS AND QUICK SAVE ROW -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- CARD 1: ACTIVE LIVE SESSION -->
+                <Border Grid.Column="0" Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="14" Padding="18,14" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="CURRENT WARFRAME SESSION" FontSize="11" FontWeight="Bold" Foreground="#A6ADC8"/>
+                        <TextBlock x:Name="txtCurrentActiveAccount" Text="Checking..." FontSize="16" FontWeight="Bold" Foreground="#A6E3A1" Margin="0,6,0,2"/>
+                        <TextBlock x:Name="txtCurrentHashInfo" Text="Hash: Detecting..." FontSize="11" Foreground="#A6ADC8" TextWrapping="Wrap"/>
+                        <TextBlock x:Name="txtCurrentGuidInfo" Text="Machine GUID: ..." FontSize="11" Foreground="#A6ADC8" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- CARD 2: SAVE CURRENT SESSION TO VAULT -->
+                <Border Grid.Column="1" Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="14" Padding="18,14" Margin="8,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="SAVE CURRENT ACCOUNT" FontSize="11" FontWeight="Bold" Foreground="#89B4FA" Margin="0,0,0,6"/>
+                        <TextBox x:Name="txtNewProfileName" Height="32" Background="#11111B" Foreground="#CDD6F4" BorderBrush="#313244" BorderThickness="1" Padding="8,4" FontSize="12" Margin="0,0,0,8" VerticalContentAlignment="Center"/>
+                        <Button x:Name="btnSaveCurrentSession" Content="💾  Save to Vault" Style="{StaticResource AccentButton}" Margin="0" Padding="14,8" Click="btnSaveCurrentSession_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- LIST OF SAVED ACCOUNTS -->
+            <Border Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="14" Padding="18,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="📂" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="SAVED ACCOUNTS" FontSize="12" FontWeight="Bold" Foreground="#89B4FA" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock x:Name="txtProfilesCount" Text="0 Accounts" FontSize="11" Foreground="#A6ADC8" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- FEEDBACK / PROGRESS MESSAGE -->
+                    <Border x:Name="borderVaultProgress" Background="#1E1E2E" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,0,0,12" Visibility="Collapsed">
+                        <TextBlock x:Name="txtVaultProgress" Text="Switching account..." FontSize="12" FontWeight="SemiBold" Foreground="#89B4FA"/>
+                    </Border>
+
+                    <!-- PROFILES LIST -->
+                    <ItemsControl x:Name="itemsProfiles">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#11111B" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="10" Padding="14,12" Margin="0,0,0,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding ProfileName}" FontSize="15" FontWeight="Bold" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                                <Border Background="#25273C" BorderBrush="#89B4FA" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding AccountHash, StringFormat='ID: {0}...'}" FontSize="10" Foreground="#89B4FA"/>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <TextBlock Text="{Binding LastUsedAt, StringFormat='Last Used: {0:yyyy-MM-dd HH:mm}'}" FontSize="11" Foreground="#A6ADC8" Margin="0,4,0,0"/>
+                                            <TextBlock Text="{Binding AssociatedGuid, StringFormat='GUID: {0}'}" FontSize="10" Foreground="#585B70" Margin="0,2,0,0"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Content="🚀  Switch Account" Style="{StaticResource PrimaryLaunchButton}" Tag="{Binding ProfileName}" Click="btnSwitchAccount_Click" Margin="0,0,8,0" Padding="14,6"/>
+                                            <Button Content="🗑️" Style="{StaticResource DangerButton}" Tag="{Binding ProfileName}" Click="btnDeleteProfile_Click" Margin="0" Padding="10,6" ToolTip="Delete Account"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock x:Name="txtEmptyVault" Text="No saved accounts yet. Enter a name above and click 'Save to Vault'." FontSize="12" Foreground="#6C7086" HorizontalAlignment="Center" Margin="0,16" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -458,6 +458,7 @@
                             <Border Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="10" Padding="4">
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="btnTabDashboard" Content="⚡  Dashboard" Style="{StaticResource SecondaryButton}" Click="btnTabDashboard_Click" Margin="0,0,4,0" Padding="14,6"/>
+                                    <Button x:Name="btnTabVault" Content="🔐  Account Vault" Style="{StaticResource SecondaryButton}" Click="btnTabVault_Click" Margin="0,0,4,0" Padding="14,6"/>
                                     <Button x:Name="btnTabUpdater" Content="🚀  Updater" Style="{StaticResource SecondaryButton}" Click="btnTabUpdater_Click" Margin="0,0,4,0" Padding="14,6"/>
                                     <Button x:Name="btnTabSpoofer" Content="🎭  Spoofer" Style="{StaticResource SecondaryButton}" Click="btnTabSpoofer_Click" Margin="0" Padding="14,6"/>
                                 </StackPanel>
@@ -543,6 +544,28 @@
 
                         <!-- LAUNCHER PLATFORM CARDS + ACTION BUTTONS -->
                         <StackPanel Grid.Row="1" Margin="0,0,0,24">
+
+                            <!-- QUICK ACCOUNT VAULT & OPTIMIZER STATUS BANNER -->
+                            <Border Background="#161624" BorderBrush="#2B2B3F" BorderThickness="1" CornerRadius="12" Padding="14,10" Margin="0,0,0,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="🔐" FontSize="13" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="txtDashActiveAccount" Text="Account Vault: Loading..." FontSize="12" FontWeight="Bold" Foreground="#CDD6F4" VerticalAlignment="Center"/>
+                                        <TextBlock Text=" • " FontSize="12" Foreground="#585B70" VerticalAlignment="Center" Margin="6,0"/>
+                                        <TextBlock x:Name="txtDashAutoSpoofState" Text="Auto-Spoof: ACTIVE" FontSize="11" FontWeight="SemiBold" Foreground="#A6E3A1" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button x:Name="btnDashQuickSwitch" Content="🔄 Switch Account" Style="{StaticResource SecondaryButton}" Click="btnDashQuickSwitch_Click" Margin="0" Padding="12,4"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
                             <!-- LAUNCHER CARDS HEADER -->
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
@@ -709,6 +732,14 @@
                             <TranslateTransform x:Name="transUpdater" Y="12"/>
                         </Grid.RenderTransform>
                         <ui:WarframeUpdaterView x:Name="updaterControlView"/>
+                    </Grid>
+
+                    <!-- ACCOUNT VAULT MODULE VIEW (CONTAINER TAB) -->
+                    <Grid x:Name="gridVaultView" Grid.Row="1" Grid.RowSpan="3" Visibility="Collapsed" Opacity="0.0" RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <TranslateTransform x:Name="transVault" Y="12"/>
+                        </Grid.RenderTransform>
+                        <ui:AccountVaultControl x:Name="vaultControlView"/>
                     </Grid>
                 </Grid>
             </Grid>

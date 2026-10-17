@@ -27,6 +27,7 @@ public partial class MainWindow : Window
     private readonly ExternalLauncher _externalLauncher;
     private readonly SpooferManager _spooferManager;
     private readonly GuidSpoofManager _guidSpoofManager;
+    private readonly AccountVaultManager _vaultManager;
     private readonly WarframeUpdateManager _updateManager;
 
     private readonly AmbientMusicManager _ambientMusicManager;
@@ -86,6 +87,7 @@ public partial class MainWindow : Window
         _updateManager = updateManager ?? throw new ArgumentNullException(nameof(updateManager));
         _spooferManager = new SpooferManager(_settings, _logger);
         _guidSpoofManager = new GuidSpoofManager(_settings, _logger);
+        _vaultManager = new AccountVaultManager(_settings, _logger, _guidSpoofManager, _spooferManager);
 
         _ambientMusicManager = new AmbientMusicManager(_settings, _logger);
         _trayManager = new SystemTrayManager(this, _logger, _ambientMusicManager);
@@ -96,8 +98,10 @@ public partial class MainWindow : Window
         txtAudioMuteIcon.Text = _ambientMusicManager.IsMuted ? "🔇" : "🔊";
         txtAudioVolumeValue.Text = $"{(int)_ambientMusicManager.Volume}%";
 
-        // Initialize Warframe Updater View
+        // Initialize Warframe Updater and Account Vault Views
         updaterControlView.Initialize(_settings, _logger, _updateManager);
+        vaultControlView.Initialize(_settings, _logger, _vaultManager, _guidSpoofManager);
+        vaultControlView.AccountSwitched += (s, acc) => UpdateDashboardQuickStatus();
 
         // Start ambient music playback asynchronously
         _ambientMusicManager.InitializeAndStart();
@@ -573,6 +577,7 @@ public partial class MainWindow : Window
 
         // Initialize Spoofer module view
         spooferControlView.Initialize(_spooferManager, _guidSpoofManager, _logger);
+        UpdateDashboardQuickStatus();
 
         // Load and validate launcher logo & profile images
         var profileImage = ImageAssetManager.Load("Assets/profile.png", _logger);
@@ -1142,6 +1147,12 @@ public partial class MainWindow : Window
         SwitchTab("Dashboard");
     }
 
+    private void btnTabVault_Click(object sender, RoutedEventArgs e)
+    {
+        vaultControlView.UpdateUi();
+        SwitchTab("Vault");
+    }
+
     private void btnTabUpdater_Click(object sender, RoutedEventArgs e)
     {
         SwitchTab("Updater");
@@ -1152,16 +1163,54 @@ public partial class MainWindow : Window
         SwitchTab("Spoofer");
     }
 
+    private void btnDashQuickSwitch_Click(object sender, RoutedEventArgs e)
+    {
+        vaultControlView.UpdateUi();
+        SwitchTab("Vault");
+    }
+
+    private void UpdateDashboardQuickStatus()
+    {
+        if (txtDashActiveAccount == null) return;
+
+        string activeProfile = _settings.ActiveAccountVaultProfile;
+        if (!string.IsNullOrEmpty(activeProfile))
+        {
+            txtDashActiveAccount.Text = $"Vault: {activeProfile}";
+            txtDashActiveAccount.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A6E3A1"));
+        }
+        else
+        {
+            string? hash = _vaultManager?.DetectCurrentWarframeAccountHash();
+            if (!string.IsNullOrEmpty(hash))
+            {
+                txtDashActiveAccount.Text = $"Vault: Live Session ({hash.Substring(0, Math.Min(6, hash.Length))}...)";
+                txtDashActiveAccount.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAB387"));
+            }
+            else
+            {
+                txtDashActiveAccount.Text = "Vault: No Account Selected";
+                txtDashActiveAccount.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CDD6F4"));
+            }
+        }
+
+        bool autoSpoof = _settings.EnableAccountVaultAutoSpoof;
+        txtDashAutoSpoofState.Text = autoSpoof ? "Auto-Spoof: ACTIVE" : "Auto-Spoof: DISABLED";
+        txtDashAutoSpoofState.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(autoSpoof ? "#A6E3A1" : "#F38BA8"));
+    }
+
     private void SwitchTab(string targetTab)
     {
         if (_isTabTransitionRunning) return;
 
         bool isDashboard = string.Equals(targetTab, "Dashboard", StringComparison.OrdinalIgnoreCase);
+        bool isVault = string.Equals(targetTab, "Vault", StringComparison.OrdinalIgnoreCase);
         bool isUpdater = string.Equals(targetTab, "Updater", StringComparison.OrdinalIgnoreCase);
         bool isSpoofer = string.Equals(targetTab, "Spoofer", StringComparison.OrdinalIgnoreCase);
 
         // Check if already active
         if (isDashboard && gridDashboardView.Visibility == Visibility.Visible) return;
+        if (isVault && gridVaultView.Visibility == Visibility.Visible) return;
         if (isUpdater && gridUpdaterView.Visibility == Visibility.Visible) return;
         if (isSpoofer && gridSpooferView.Visibility == Visibility.Visible) return;
 
@@ -1172,8 +1221,13 @@ public partial class MainWindow : Window
         var easeOut = new CubicEase { EasingMode = EasingMode.EaseOut };
         var easeIn = new CubicEase { EasingMode = EasingMode.EaseIn };
 
-        Grid showGrid = isDashboard ? gridDashboardView : (isUpdater ? gridUpdaterView : gridSpooferView);
-        TranslateTransform showTrans = isDashboard ? transDashboard : (isUpdater ? transUpdater : transSpoofer);
+        Grid showGrid = isDashboard ? gridDashboardView :
+                        isVault ? gridVaultView :
+                        isUpdater ? gridUpdaterView : gridSpooferView;
+
+        TranslateTransform showTrans = isDashboard ? transDashboard :
+                                      isVault ? transVault :
+                                      isUpdater ? transUpdater : transSpoofer;
 
         List<Grid> hideGrids = new();
         List<TranslateTransform> hideTransforms = new();
@@ -1182,6 +1236,11 @@ public partial class MainWindow : Window
         {
             hideGrids.Add(gridDashboardView);
             hideTransforms.Add(transDashboard);
+        }
+        if (!isVault && gridVaultView.Visibility == Visibility.Visible)
+        {
+            hideGrids.Add(gridVaultView);
+            hideTransforms.Add(transVault);
         }
         if (!isUpdater && gridUpdaterView.Visibility == Visibility.Visible)
         {
@@ -1195,6 +1254,7 @@ public partial class MainWindow : Window
         }
 
         btnTabDashboard.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isDashboard ? "#89B4FA" : "#A6ADC8"));
+        btnTabVault.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isVault ? "#89B4FA" : "#A6ADC8"));
         btnTabUpdater.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isUpdater ? "#89B4FA" : "#A6ADC8"));
         btnTabSpoofer.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(isSpoofer ? "#89B4FA" : "#A6ADC8"));
 

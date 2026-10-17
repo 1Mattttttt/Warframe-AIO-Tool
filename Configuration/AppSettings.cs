@@ -70,6 +70,10 @@ public class AppSettings
     public string CurrentGuid { get; set; } = string.Empty;
     public System.Collections.Generic.List<string> GuidHistory { get; set; } = new();
 
+    // Account Vault & Stealth Switcher
+    public bool EnableAccountVaultAutoSpoof { get; set; } = true;
+    public string ActiveAccountVaultProfile { get; set; } = string.Empty;
+
     // Logging
     public bool EnableFileLogging { get; set; } = true;
     public int MaxLogEntries { get; set; } = 1000;

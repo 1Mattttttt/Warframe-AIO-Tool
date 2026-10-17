@@ -178,6 +178,12 @@ exit /b 0
         return embeddedPath;
     }
 
+    public Task<bool> RunMacSpooferAsync(Action<string>? statusCallback = null)
+    {
+        string path = FindOrExtractScript("spoofer_mac.bat", EmbeddedNetFixerBat);
+        return ExecuteToolAsync("MAC Spoofer", path, requireAdmin: true, statusCallback);
+    }
+
     public Task<bool> RunNetFixerAsync(Action<string>? statusCallback = null)
     {
         string path = FindOrExtractScript(NetFixerSubPath, EmbeddedNetFixerBat);
